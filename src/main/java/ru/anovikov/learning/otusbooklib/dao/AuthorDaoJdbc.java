@@ -1,5 +1,6 @@
 package ru.anovikov.learning.otusbooklib.dao;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
@@ -25,7 +26,7 @@ public class AuthorDaoJdbc implements AuthorDao {
 
     @Override
     public void insert(Author author){
-        Map<String, Object> params = new HashMap();
+        HashMap<String, Object> params = new HashMap();
         params.put("id", author.getId());
         params.put("firstName", author.getFirstName());
         params.put("lastName", author.getLastName());
@@ -34,10 +35,17 @@ public class AuthorDaoJdbc implements AuthorDao {
 
     @Override
     public Author getById(long id){
-        Map<String, Object> params = Collections.singletonMap("id", id);
-        return namedParameterJdbcOperations.queryForObject(
-                "select id, firstName, lastName from authors where id = :id", params, new AuthorMapper()
-        );
+        Author author = null;
+        try {
+            Map<String, Object> params = Collections.singletonMap("id", id);
+            author = namedParameterJdbcOperations.queryForObject(
+                    "select id, firstName, lastName from authors where id = :id", params, new AuthorMapper()
+            );
+        }
+        catch (EmptyResultDataAccessException e) {
+            author = null;
+        }
+        return author;
     }
 
     @Override
@@ -57,7 +65,7 @@ public class AuthorDaoJdbc implements AuthorDao {
 
         @Override
         public Author mapRow(ResultSet resultSet, int i) throws SQLException {
-            int id = resultSet.getInt("id");
+            long id = resultSet.getLong("id");
             String firstName = resultSet.getString("firstName");
             String lastName = resultSet.getString("lastName");
             return new Author(id, firstName, lastName);
