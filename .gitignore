@@ -1,14 +1,8 @@
+HELP.md
+
 # Compiled class file
 *.class
-
-# Log file
-*.log
-
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+/target
 
 # Package Files #
 *.jar
@@ -19,5 +13,39 @@
 *.tar.gz
 *.rar
 
+# Maven #
+/mvnw
+/mvnw.cmd
+/.mvn
+
+# Log file
+*.log
+
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+
+### VS Code ###
+.vscode/
