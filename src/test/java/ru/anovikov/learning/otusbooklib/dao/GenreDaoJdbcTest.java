@@ -14,8 +14,7 @@ class GenreDaoJdbcTest {
     private static final long FIELD_INS_ID = 100000;
     private static final String FIELD_INS_GENRENAME = "genre1";
 
-    private static final long FIELD_DEL_ID = 100001;
-    private static final String FIELD_DEL_GENRENAME = "genre2";
+    private static final long FIELD_DEL_ID = 3;
 
     @Autowired
     private GenreDaoJdbc genreDaoJdbc;
@@ -24,17 +23,20 @@ class GenreDaoJdbcTest {
     void shouldSaveAndLoadCorrectGenre() {
         Genre genre = new Genre(FIELD_INS_ID, FIELD_INS_GENRENAME);
         genreDaoJdbc.insert(genre);
-        Genre actualGenre = genreDaoJdbc.getById(FIELD_INS_ID);
-        assertThat(actualGenre.getGenreName()).isEqualTo(FIELD_INS_GENRENAME);
+        assertThat(genreDaoJdbc.getById(FIELD_INS_ID))
+                .hasFieldOrPropertyWithValue("genreName", FIELD_INS_GENRENAME);
     }
 
     @Test
-    void shouldSaveAndDeleteGenre() {
-        Genre genre = new Genre(FIELD_DEL_ID, FIELD_DEL_GENRENAME);
-        genreDaoJdbc.insert(genre);
+    void shouldUpdateGenre() {
+        // TODO: write test
+        /*genreDaoJdbc.deleteById(FIELD_DEL_ID);
+        assertThat(genreDaoJdbc.getById(FIELD_DEL_ID)).isNull();*/
+    }
+
+    @Test
+    void shouldDeleteGenre() {
         genreDaoJdbc.deleteById(FIELD_DEL_ID);
-        Genre delGenre = genreDaoJdbc.getById(FIELD_DEL_ID);
-        delGenre = null; // TODO: Need to fix problem with del test
-        assertThat(delGenre).isNull();
+        assertThat(genreDaoJdbc.getById(FIELD_DEL_ID)).isNull();
     }
 }

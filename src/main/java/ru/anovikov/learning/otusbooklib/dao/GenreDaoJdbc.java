@@ -2,6 +2,7 @@ package ru.anovikov.learning.otusbooklib.dao;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
 import ru.anovikov.learning.otusbooklib.domain.Genre;
@@ -25,9 +26,9 @@ public class GenreDaoJdbc implements GenreDao {
 
     @Override
     public void insert(Genre genre){
-        HashMap<String, Object> params = new HashMap();
-        params.put("id", genre.getId());
-        params.put("genreName", genre.getGenreName());
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("id", genre.getId());
+        params.addValue("genreName", genre.getGenreName());
         namedParameterJdbcOperations.update("insert into genres (id, genreName) values (:id, :genreName)", params);
     }
 
@@ -37,7 +38,7 @@ public class GenreDaoJdbc implements GenreDao {
         try {
             Map<String, Object> params = Collections.singletonMap("id", id);
             genre = namedParameterJdbcOperations.queryForObject(
-                    "select id, genreName from genres", params, new GenreMapper()
+                    "select id, genreName from genres where id = :id", params, new GenreMapper()
             );
         }
         catch (EmptyResultDataAccessException e) {

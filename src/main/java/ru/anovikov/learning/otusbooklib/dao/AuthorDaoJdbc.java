@@ -2,7 +2,10 @@ package ru.anovikov.learning.otusbooklib.dao;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import ru.anovikov.learning.otusbooklib.domain.Author;
@@ -10,7 +13,6 @@ import ru.anovikov.learning.otusbooklib.domain.Author;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,11 +28,12 @@ public class AuthorDaoJdbc implements AuthorDao {
 
     @Override
     public void insert(Author author){
-        HashMap<String, Object> params = new HashMap();
-        params.put("id", author.getId());
-        params.put("firstName", author.getFirstName());
-        params.put("lastName", author.getLastName());
-        namedParameterJdbcOperations.update("insert into authors (id, firstName, lastName) values (:id, :firstName, :lastName)", params);
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("id", author.getId());
+        params.addValue("firstName", author.getFirstName());
+        params.addValue("lastName", author.getLastName());
+        KeyHolder kh = new GeneratedKeyHolder();
+        namedParameterJdbcOperations.update("insert into authors (id, firstName, lastName) values (:id, :firstName, :lastName)", params, kh);
     }
 
     @Override
@@ -59,6 +62,16 @@ public class AuthorDaoJdbc implements AuthorDao {
         namedParameterJdbcOperations.update(
                 "delete from authors where id = :id", params
         );
+    }
+
+    @Override
+    public void update(Author author, long id){
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("id", author.getId());
+        params.addValue("firstName", author.getFirstName());
+        params.addValue("lastName", author.getLastName());
+        KeyHolder kh = new GeneratedKeyHolder();
+        namedParameterJdbcOperations.update("update authors set firstName = :firstName, lastName = :lastName where id = :id", params, kh);
     }
 
     private static class AuthorMapper implements RowMapper<Author> {
