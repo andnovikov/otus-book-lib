@@ -14,6 +14,10 @@ class AuthorDaoJdbcTest {
     private static final String FIELD_INS_FIRSTNAME = "firstname";
     private static final String FIELD_INS_LASTNAME = "lastname";
 
+    private static final long FIELD_UPD_ID = 2;
+    private static final String FIELD_UPD_FIRSTNAME = "firstname1";
+    private static final String FIELD_UPD_LASTNAME = "lastname1";
+
     private static final long FIELD_DEL_ID = 3;
 
     @Autowired
@@ -29,9 +33,10 @@ class AuthorDaoJdbcTest {
 
     @Test
     void shouldUpateAuthor() {
-        // TODO: write test
-        /*authorDaoJdbc.deleteById(FIELD_DEL_ID);
-        assertThat(authorDaoJdbc.getById(FIELD_DEL_ID)).isNull();*/
+        Author author = new Author(0, FIELD_UPD_FIRSTNAME, FIELD_UPD_LASTNAME);
+        authorDaoJdbc.update(author, FIELD_UPD_ID);
+        assertThat(authorDaoJdbc.getById(FIELD_UPD_ID))
+                .hasFieldOrPropertyWithValue("firstName", FIELD_UPD_FIRSTNAME);
     }
 
     @Test

@@ -27,13 +27,32 @@ public class AuthorDaoJdbc implements AuthorDao {
     }
 
     @Override
-    public void insert(Author author){
+    public Author insert(Author author){
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("id", author.getId());
         params.addValue("firstName", author.getFirstName());
         params.addValue("lastName", author.getLastName());
         KeyHolder kh = new GeneratedKeyHolder();
-        namedParameterJdbcOperations.update("insert into authors (id, firstName, lastName) values (:id, :firstName, :lastName)", params, kh);
+        namedParameterJdbcOperations.update("insert into author (firstName, lastName) values (:firstName, :lastName)", params, kh);
+        author.setId(kh.getKey().longValue());
+        return author;
+    }
+
+    @Override
+    public void update(Author author, long id){
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("id", id);
+        params.addValue("firstName", author.getFirstName());
+        params.addValue("lastName", author.getLastName());
+        KeyHolder kh = new GeneratedKeyHolder();
+        namedParameterJdbcOperations.update("update author set firstName = :firstName, lastName = :lastName where id = :id", params, kh);
+    }
+
+    @Override
+    public void deleteById(long id){
+        Map<String, Object> params = Collections.singletonMap("id", id);
+        namedParameterJdbcOperations.update(
+                "delete from author where id = :id", params
+        );
     }
 
     @Override
@@ -42,7 +61,24 @@ public class AuthorDaoJdbc implements AuthorDao {
         try {
             Map<String, Object> params = Collections.singletonMap("id", id);
             author = namedParameterJdbcOperations.queryForObject(
-                    "select id, firstName, lastName from authors where id = :id", params, new AuthorMapper()
+                    "select id, firstName, lastName from author where id = :id", params, new AuthorMapper()
+            );
+        }
+        catch (EmptyResultDataAccessException e) {
+            author = null;
+        }
+        return author;
+    }
+
+    @Override
+    public Author getByName(String firstName, String lastName){
+        Author author = null;
+        try {
+            MapSqlParameterSource params = new MapSqlParameterSource();
+            params.addValue("firstName", firstName);
+            params.addValue("lastName", lastName);
+            author = namedParameterJdbcOperations.queryForObject(
+                    "select id, firstName, lastName from author where firstName = :firstName and lastName = :lastName", params, new AuthorMapper()
             );
         }
         catch (EmptyResultDataAccessException e) {
@@ -53,25 +89,7 @@ public class AuthorDaoJdbc implements AuthorDao {
 
     @Override
     public List<Author> getAll(){
-        return namedParameterJdbcOperations.query("select id, firstName, lastName from authors", new AuthorMapper());
-    }
-
-    @Override
-    public void deleteById(long id){
-        Map<String, Object> params = Collections.singletonMap("id", id);
-        namedParameterJdbcOperations.update(
-                "delete from authors where id = :id", params
-        );
-    }
-
-    @Override
-    public void update(Author author, long id){
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("id", author.getId());
-        params.addValue("firstName", author.getFirstName());
-        params.addValue("lastName", author.getLastName());
-        KeyHolder kh = new GeneratedKeyHolder();
-        namedParameterJdbcOperations.update("update authors set firstName = :firstName, lastName = :lastName where id = :id", params, kh);
+        return namedParameterJdbcOperations.query("select id, firstName, lastName from author", new AuthorMapper());
     }
 
     private static class AuthorMapper implements RowMapper<Author> {

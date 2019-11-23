@@ -14,6 +14,9 @@ class GenreDaoJdbcTest {
     private static final long FIELD_INS_ID = 100000;
     private static final String FIELD_INS_GENRENAME = "genre1";
 
+    private static final long FIELD_UPD_ID = 2;
+    private static final String FIELD_UPD_GENRENAME = "genre2";
+
     private static final long FIELD_DEL_ID = 3;
 
     @Autowired
@@ -29,9 +32,10 @@ class GenreDaoJdbcTest {
 
     @Test
     void shouldUpdateGenre() {
-        // TODO: write test
-        /*genreDaoJdbc.deleteById(FIELD_DEL_ID);
-        assertThat(genreDaoJdbc.getById(FIELD_DEL_ID)).isNull();*/
+        Genre genre = new Genre(0, FIELD_UPD_GENRENAME);
+        genreDaoJdbc.update(genre, FIELD_UPD_ID);
+        assertThat(genreDaoJdbc.getById(FIELD_UPD_ID))
+                .hasFieldOrPropertyWithValue("genreName", FIELD_UPD_GENRENAME);
     }
 
     @Test

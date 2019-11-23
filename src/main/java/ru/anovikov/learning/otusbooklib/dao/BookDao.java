@@ -5,11 +5,15 @@ import ru.anovikov.learning.otusbooklib.domain.Book;
 import java.util.List;
 
 public interface BookDao {
+
     void insert(Book book);
+
+    void update(Book book, Long id);
 
     Book getById(long id);
 
     List<Book> getAll();
 
     void deleteById(long id);
+
 }

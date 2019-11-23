@@ -6,12 +6,14 @@ import java.util.List;
 
 public interface GenreDao {
 
-    void insert(Genre genre);
+    Genre insert(Genre genre);
+
+    void update(Genre genre, long id);
+
+    void deleteById(long id);
 
     Genre getById(long id);
 
     List<Genre> getAll();
-
-    void deleteById(long id);
 
 }

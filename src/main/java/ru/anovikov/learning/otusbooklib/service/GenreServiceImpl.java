@@ -9,25 +9,48 @@ import ru.anovikov.learning.otusbooklib.domain.Genre;
 public class GenreServiceImpl implements GenreService {
 
     private GenreDao genreDao;
+    private ConsoleService consoleService;
 
     @Autowired
-    public GenreServiceImpl(GenreDao genreDao) {
+    public GenreServiceImpl(GenreDao genreDao, ConsoleService consoleService) {
         this.genreDao = genreDao;
+        this.consoleService = consoleService;
     }
 
     @Override
-    public Genre createGenre(String genreName) {
-        return null;
+    public Genre insert() {
+        String genreName = consoleService.readString("read.genre.genrename");
+        Genre genre = new Genre(0, genreName);
+        genre = genreDao.insert(genre);
+
+        consoleService.writeString("table.genre", genre.toString());
+        return genre;
     }
 
     @Override
-    public Genre updateGenre(long id, String genreName) {
-        return null;
+    public Genre update() {
+        long id = consoleService.readLong("read.genre.id");
+        String genreName = consoleService.readString("read.genre.genrename");;
+        Genre genre = new Genre(0, genreName);
+        genreDao.update(genre, id);
+        genre = genreDao.getById(id);
+
+        consoleService.writeString("table.genre", genre.toString());
+        return genre;
     }
 
     @Override
-    public void deleteGenre(long id) {
+    public void delete() {
+        long id = consoleService.readLong("read.genre.id");
 
+        //TODO: Check if exists
+
+        genreDao.deleteById(id);
+    }
+
+    @Override
+    public Genre getGenre(long id){
+        return genreDao.getById(id);
     }
 
 }

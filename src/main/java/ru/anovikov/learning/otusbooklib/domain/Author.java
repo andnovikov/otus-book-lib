@@ -2,7 +2,7 @@ package ru.anovikov.learning.otusbooklib.domain;
 
 public class Author {
 
-    private final long id;
+    private long id;
     private final String firstName;
     private final String lastName;
 
@@ -16,11 +16,20 @@ public class Author {
         return id;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public String getFirstName() {
         return firstName;
     }
 
     public String getLastName() {
         return lastName;
+    }
+
+    @Override
+    public String toString() {
+        return this.id + " " + this.lastName + " " + this.firstName;
     }
 }
