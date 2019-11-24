@@ -29,8 +29,19 @@ public class GenreDaoJdbc implements GenreDao {
     @Override
     public Genre insert(Genre genre){
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("id", genre.getId());
         params.addValue("genreName", genre.getGenreName());
+
+        // check if exists by name
+        try {
+            Genre chkGenre = getByName(genre.getGenreName());
+            if (chkGenre != null) {
+                throw new DuplicateValueException();
+            }
+        }
+        catch (NoDataFoundException e) {
+            // nothing
+        }
+
         KeyHolder kh = new GeneratedKeyHolder();
         namedParameterJdbcOperations.update("insert into genre (genreName) values (:genreName)", params, kh);
         genre.setId(kh.getKey().longValue());
@@ -42,32 +53,59 @@ public class GenreDaoJdbc implements GenreDao {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("id", id);
         params.addValue("genreName", genre.getGenreName());
+
+        // check if exists by id
+        getById(id);
+        try {
+            // check if exists by name
+            Genre chkGenre = getByName(genre.getGenreName());
+            if (chkGenre != null) {
+                throw new DuplicateValueException();
+            }
+        }
+        catch (NoDataFoundException e) {
+            // nothing
+        }
+
         KeyHolder kh = new GeneratedKeyHolder();
         namedParameterJdbcOperations.update("update genre set genreName = :genreName where id = :id", params, kh);
     }
 
     @Override
     public void deleteById(long id) {
+        // check if exists by id
+        getById(id);
+
         Map<String, Object> params = Collections.singletonMap("id", id);
         namedParameterJdbcOperations.update(
-                "delete from genre where id = :id", params
-        );
+                "delete from genre where id = :id", params);
     }
 
     @Override
     public Genre getById(long id){
-        Genre genre = null;
         try {
             Map<String, Object> params = Collections.singletonMap("id", id);
-            genre = namedParameterJdbcOperations.queryForObject(
-                    "select id, genreName from genre where id = :id", params, new GenreMapper()
-            );
+            Genre genre = namedParameterJdbcOperations.queryForObject(
+                       "select id, genreName from genre where id = :id", params, new GenreMapper());
+            return genre;
         }
         catch (EmptyResultDataAccessException e) {
-            genre = null;
+            throw new NoDataFoundException();
         }
+    }
 
-        return genre;
+    @Override
+    public Genre getByName(String genreName) {
+        try {
+            MapSqlParameterSource params = new MapSqlParameterSource();
+            params.addValue("genreName", genreName);
+            Genre genre = namedParameterJdbcOperations.queryForObject(
+                       "select id, genreName from genre where genreName = :genreName", params, new GenreMapper());
+            return genre;
+        }
+        catch (EmptyResultDataAccessException e) {
+            throw new NoDataFoundException();
+        }
     }
 
     @Override

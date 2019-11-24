@@ -10,5 +10,11 @@ public interface GenreService {
 
     void delete();
 
-    Genre getGenre(long id);
+    Genre findByName();
+
+    Genre findById();
+
+    Genre getById(long id);
+
+    void print(Genre genre);
 }

@@ -26,11 +26,11 @@ public class ConsoleServiceImpl implements ConsoleService {
     public long readLong(String message) {
         long result = Long.valueOf(0);
         try {
-            System.out.print(messageSource.getMessage(message, new String[] {""}, locale) + ": ");
+            System.out.print(messageSource.getMessage(message, new String[] {""}, locale) + " ");
             result = Long.parseLong(reader.readLine());
         }
         catch (IOException e) {
-            System.out.print(messageSource.getMessage("error.read.value", new String[] {""}, locale) + ": " + e.getMessage());
+            System.out.print(messageSource.getMessage("error.read.value", new String[] {""}, locale) + " " + e.getMessage());
         }
         return result;
     };
@@ -39,11 +39,11 @@ public class ConsoleServiceImpl implements ConsoleService {
     public String readString(String message) {
         String result = "";
         try {
-            System.out.print(messageSource.getMessage(message, new String[] {""}, locale) + ": ");
+            System.out.print(messageSource.getMessage(message, new String[] {""}, locale) + " ");
             result = reader.readLine();
         }
         catch (IOException e) {
-            System.out.print(messageSource.getMessage("error.read.value", new String[] {""}, locale) + ": " + e.getMessage());
+            System.out.print(messageSource.getMessage("error.read.value", new String[] {""}, locale) + " " + e.getMessage());
         }
         return result;
     };
@@ -52,7 +52,7 @@ public class ConsoleServiceImpl implements ConsoleService {
     public void writeString(String message, String value) {
         String str = "";
         if (message.length() > 0) {
-            System.out.print(messageSource.getMessage(message, new String[] {""}, locale) + ": ");
+            System.out.print(messageSource.getMessage(message, new String[] {""}, locale) + " ");
         }
         System.out.println(value);
     };

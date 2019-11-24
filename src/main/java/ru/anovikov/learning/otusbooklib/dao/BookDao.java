@@ -6,14 +6,18 @@ import java.util.List;
 
 public interface BookDao {
 
-    void insert(Book book);
+    Book insert(Book book);
 
-    void update(Book book, Long id);
+    Book update(Book book, Long id);
 
     Book getById(long id);
 
-    List<Book> getAll();
+    Book getByTitle(String title);
+
+    Book getByParam(long authorId, long genreId, String title);
 
     void deleteById(long id);
+
+    List<Book> getAll();
 
 }

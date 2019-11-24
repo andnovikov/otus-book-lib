@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import ru.anovikov.learning.otusbooklib.domain.Author;
 
+import javax.xml.soap.Node;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
@@ -31,6 +32,18 @@ public class AuthorDaoJdbc implements AuthorDao {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("firstName", author.getFirstName());
         params.addValue("lastName", author.getLastName());
+
+        // check if exists by name
+        try {
+            Author chkAuthor = getByName(author.getFirstName(), author.getLastName());
+            if (chkAuthor != null) {
+                throw new DuplicateValueException();
+            }
+        }
+        catch (NoDataFoundException e) {
+            // nothing
+        }
+
         KeyHolder kh = new GeneratedKeyHolder();
         namedParameterJdbcOperations.update("insert into author (firstName, lastName) values (:firstName, :lastName)", params, kh);
         author.setId(kh.getKey().longValue());
@@ -43,12 +56,29 @@ public class AuthorDaoJdbc implements AuthorDao {
         params.addValue("id", id);
         params.addValue("firstName", author.getFirstName());
         params.addValue("lastName", author.getLastName());
+
+        // check if exists by id
+        getById(id);
+        try {
+            // check if exists by name
+            Author chkAuthor = getByName(author.getFirstName(), author.getLastName());
+            if (chkAuthor != null) {
+                throw new DuplicateValueException();
+            }
+        }
+        catch (NoDataFoundException e) {
+            // nothing
+        }
+
         KeyHolder kh = new GeneratedKeyHolder();
         namedParameterJdbcOperations.update("update author set firstName = :firstName, lastName = :lastName where id = :id", params, kh);
     }
 
     @Override
     public void deleteById(long id){
+        // check if exists by id
+        getById(id);
+
         Map<String, Object> params = Collections.singletonMap("id", id);
         namedParameterJdbcOperations.update(
                 "delete from author where id = :id", params
@@ -57,22 +87,20 @@ public class AuthorDaoJdbc implements AuthorDao {
 
     @Override
     public Author getById(long id){
-        Author author = null;
         try {
             Map<String, Object> params = Collections.singletonMap("id", id);
-            author = namedParameterJdbcOperations.queryForObject(
-                    "select id, firstName, lastName from author where id = :id", params, new AuthorMapper()
-            );
+            Author author = namedParameterJdbcOperations.queryForObject(
+                        "select id, firstName, lastName from author where id = :id", params, new AuthorMapper());
+            return author;
         }
         catch (EmptyResultDataAccessException e) {
-            author = null;
+            throw new NoDataFoundException();
         }
-        return author;
     }
 
     @Override
     public Author getByName(String firstName, String lastName){
-        Author author = null;
+        Author author;
         try {
             MapSqlParameterSource params = new MapSqlParameterSource();
             params.addValue("firstName", firstName);
@@ -82,7 +110,7 @@ public class AuthorDaoJdbc implements AuthorDao {
             );
         }
         catch (EmptyResultDataAccessException e) {
-            author = null;
+            throw new NoDataFoundException();
         }
         return author;
     }

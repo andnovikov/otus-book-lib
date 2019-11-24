@@ -5,6 +5,7 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import ru.anovikov.learning.otusbooklib.domain.Author;
 import ru.anovikov.learning.otusbooklib.service.AuthorService;
+import ru.anovikov.learning.otusbooklib.service.ConsoleService;
 
 @ShellComponent
 public class AuthorShell {
@@ -18,12 +19,14 @@ public class AuthorShell {
 
     @ShellMethod(value = "Add author", key = {"add-author", "aa"})
     public void addAuthor() {
-        authorService.insert();
+        Author author = authorService.insert();
+        authorService.print(author);
     }
 
     @ShellMethod(value = "Update author", key = {"update-author", "ua"})
     public void updateAuthor() {
-        authorService.update();
+        Author author = authorService.update();
+        authorService.print(author);
     }
 
     @ShellMethod(value = "Delete author", key = {"delete-author", "da"})
@@ -31,9 +34,16 @@ public class AuthorShell {
         authorService.delete();
     }
 
-    @ShellMethod(value = "Find author", key = {"find-author", "fa"})
-    public void printAuthor() {
-        authorService.findByName();
+    @ShellMethod(value = "Find author by id", key = {"find-author-id", "fai"})
+    public void findAuthorById() {
+        Author author = authorService.findById();
+        authorService.print(author);
+    }
+
+    @ShellMethod(value = "Find author by name", key = {"find-author-name", "fan"})
+    public void findAuthorByName() {
+        Author author = authorService.findByName();
+        authorService.print(author);
     }
 
 }

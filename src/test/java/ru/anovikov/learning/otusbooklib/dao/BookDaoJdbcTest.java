@@ -10,11 +10,11 @@ import ru.anovikov.learning.otusbooklib.service.AuthorService;
 import ru.anovikov.learning.otusbooklib.service.GenreService;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 class BookDaoJdbcTest {
 
-    private static final long FIELD_INS_ID = 100000;
     private static final long FIELD_INS_GENREID = 1;
     private static final long FIELD_INS_AUTHORID = 1;
     private static final String FIELD_INS_TITLE = "book1";
@@ -24,7 +24,15 @@ class BookDaoJdbcTest {
     private static final long FIELD_UPD_AUTHORID = 1;
     private static final String FIELD_UPD_TITLE = "book2";
 
-    private static final long FIELD_DEL_ID = 3;
+    private static final long FIELD_DEL_ID = 2;
+
+    private static final long FIELD_INSDUP_AUTHORID = 1;
+    private static final long FIELD_INSDUP_GENREID = 1;
+    private static final String FIELD_INSDUP_TITLE = "book3";
+
+    private static final long FIELD_UPDDUP_AUTHORID = 1;
+    private static final long FIELD_UPDDUP_GENREID = 1;
+    private static final String FIELD_UPDDUP_TITLE = "book4";
 
     @Autowired
     private BookDaoJdbc bookDaoJdbc;
@@ -37,18 +45,18 @@ class BookDaoJdbcTest {
 
     @Test
     void shouldSaveAndLoadCorrectBook() {
-        Book book = new Book(FIELD_INS_ID,
+        Book book = new Book(0,
                              new Author(FIELD_INS_AUTHORID, "",""),
                              new Genre(FIELD_INS_GENREID, ""), FIELD_INS_TITLE);
         bookDaoJdbc.insert(book);
-        assertThat(bookDaoJdbc.getById(FIELD_INS_ID))
+        assertThat(bookDaoJdbc.getById(book.getId()))
                 .hasFieldOrPropertyWithValue("title", FIELD_INS_TITLE);
     }
 
     @Test
     void shouldUpdateBook() {
         Author author = authorService.getById(FIELD_UPD_AUTHORID);
-        Genre genre = genreService.getGenre(FIELD_UPD_GENREID);
+        Genre genre = genreService.getById(FIELD_UPD_GENREID);
         Book book = new Book(FIELD_UPD_ID, author, genre, FIELD_UPD_TITLE);
         bookDaoJdbc.update(book, FIELD_UPD_ID);
         assertThat(bookDaoJdbc.getById(FIELD_UPD_ID))
@@ -58,6 +66,32 @@ class BookDaoJdbcTest {
     @Test
     void shouldDeleteBook() {
         bookDaoJdbc.deleteById(FIELD_DEL_ID);
-        assertThat(bookDaoJdbc.getById(FIELD_DEL_ID)).isNull();
+        assertThrows(NoDataFoundException.class, () -> {bookDaoJdbc.getById(FIELD_DEL_ID);});
+    }
+
+    @Test
+    void shouldCheckDuplicateInsertBook() {
+        Book book = new Book(0,
+                new Author(FIELD_INSDUP_AUTHORID, "",""),
+                new Genre(FIELD_INSDUP_GENREID, ""), FIELD_INSDUP_TITLE);
+        bookDaoJdbc.insert(book);
+        assertThrows(DuplicateValueException.class, () -> {
+            bookDaoJdbc.insert(new Book(0,
+                    new Author(FIELD_INSDUP_AUTHORID, "",""),
+                    new Genre(FIELD_INSDUP_GENREID, ""), FIELD_INSDUP_TITLE));
+        });
+    }
+
+    @Test
+    void shouldCheckDuplicateUpdateBook() {
+        Book book = new Book(0,
+                new Author(FIELD_UPDDUP_AUTHORID, "",""),
+                new Genre(FIELD_UPDDUP_GENREID, ""), FIELD_UPDDUP_TITLE);
+        bookDaoJdbc.insert(book);
+        assertThrows(DuplicateValueException.class, () -> {
+            bookDaoJdbc.update(new Book(0,
+                    new Author(FIELD_UPDDUP_AUTHORID, "",""),
+                    new Genre(FIELD_UPDDUP_GENREID, ""), FIELD_UPDDUP_TITLE), FIELD_UPD_ID);
+        });
     }
 }

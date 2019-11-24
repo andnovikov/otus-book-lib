@@ -2,7 +2,9 @@ package ru.anovikov.learning.otusbooklib.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.anovikov.learning.otusbooklib.dao.DuplicateValueException;
 import ru.anovikov.learning.otusbooklib.dao.GenreDao;
+import ru.anovikov.learning.otusbooklib.dao.NoDataFoundException;
 import ru.anovikov.learning.otusbooklib.domain.Genre;
 
 @Service
@@ -19,38 +21,90 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public Genre insert() {
-        String genreName = consoleService.readString("read.genre.genrename");
-        Genre genre = new Genre(0, genreName);
-        genre = genreDao.insert(genre);
-
-        consoleService.writeString("table.genre", genre.toString());
-        return genre;
+        try {
+            String genreName = consoleService.readString("read.genre.genrename");
+            Genre genre = new Genre(0, genreName);
+            genre = genreDao.insert(genre);
+            return genre;
+        }
+        catch (DuplicateValueException e) {
+            consoleService.writeString("error.genre.exists", "");
+        }
+        return null;
     }
 
     @Override
     public Genre update() {
-        long id = consoleService.readLong("read.genre.id");
-        String genreName = consoleService.readString("read.genre.genrename");;
-        Genre genre = new Genre(0, genreName);
-        genreDao.update(genre, id);
-        genre = genreDao.getById(id);
-
-        consoleService.writeString("table.genre", genre.toString());
-        return genre;
+        try {
+            long id = consoleService.readLong("read.genre.id");
+            String genreName = consoleService.readString("read.genre.genrename");
+            Genre genre = new Genre(0, genreName);
+            genreDao.update(genre, id);
+            genre = genreDao.getById(id);
+            return genre;
+        }
+        catch (NoDataFoundException e) {
+            consoleService.writeString("error.genre.notexists", "");
+        }
+        catch (DuplicateValueException e) {
+            consoleService.writeString("error.genre.exists", "");
+        }
+        return null;
     }
 
     @Override
     public void delete() {
-        long id = consoleService.readLong("read.genre.id");
-
-        //TODO: Check if exists
-
-        genreDao.deleteById(id);
+        try {
+            long id = consoleService.readLong("read.genre.id");
+            genreDao.deleteById(id);
+        }
+        catch (NoDataFoundException e) {
+            consoleService.writeString("error.genre.notexists", "");
+        }
     }
 
     @Override
-    public Genre getGenre(long id){
-        return genreDao.getById(id);
+    public Genre getById(long id){
+        try {
+            return genreDao.getById(id);
+        }
+        catch (NoDataFoundException e) {
+            consoleService.writeString("error.genre.notexists", "");
+        }
+        return null;
     }
+
+    @Override
+    public Genre findByName(){
+        try {
+            String genreName = consoleService.readString("read.genre.genrename");
+            Genre genre = genreDao.getByName(genreName);
+            return genre;
+        }
+        catch (NoDataFoundException e) {
+            consoleService.writeString("error.genre.notexists", "");
+        }
+        return null;
+    }
+
+    @Override
+    public Genre findById(){
+        try {
+            long id = consoleService.readLong("read.genre.id");
+            Genre genre = genreDao.getById(id);
+            return genre;
+        }
+        catch (NoDataFoundException e) {
+            consoleService.writeString("error.genre.notexists", "");
+        }
+        return null;
+    }
+
+    @Override
+    public void print(Genre genre) {
+        if (genre != null) {
+            consoleService.writeString("table.genre", genre.toString());
+        }
+    };
 
 }

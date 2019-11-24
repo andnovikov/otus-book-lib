@@ -29,27 +29,59 @@ public class BookDaoJdbc implements BookDao {
     }
 
     @Override
-    public void insert(Book book) {
+    public Book insert(Book book) {
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("id", book.getId());
         params.addValue("authorId", book.getAuthor().getId());
         params.addValue("genreId", book.getGenre().getId());
         params.addValue("title", book.getTitle());
-        namedParameterJdbcOperations.update("insert into book (id, authorId, genreId, title) values (:id, :authorId, :genreId, :title)", params);
+
+        // check if exists by name
+        try {
+            Book chkBook = getByParam(book.getAuthor().getId(), book.getGenre().getId(), book.getTitle());
+            if (chkBook != null) {
+                throw new DuplicateValueException();
+            }
+        }
+        catch (NoDataFoundException e) {
+            // nothing
+        }
+
+        KeyHolder kh = new GeneratedKeyHolder();
+        namedParameterJdbcOperations.update("insert into book (authorId, genreId, title) values (:authorId, :genreId, :title)", params, kh);
+        book.setId(kh.getKey().longValue());
+        return book;
     };
 
     @Override
-    public void update(Book book, Long id) {
+    public Book update(Book book, Long id) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("id", id);
         params.addValue("authorId", book.getAuthor().getId());
         params.addValue("genreId", book.getGenre().getId());
         params.addValue("title", book.getTitle());
+
+        // check if exists by id
+        getById(id);
+        try {
+            Book chkBook = getByParam(book.getAuthor().getId(), book.getGenre().getId(), book.getTitle());
+            if (chkBook != null) {
+                throw new DuplicateValueException();
+            }
+        }
+        catch (NoDataFoundException e) {
+            // nothing
+        }
+
         namedParameterJdbcOperations.update("update book set authorId = :authorId, genreId = :genreId, title = :title where id = :id", params);
+
+        return getById(id);
     };
 
     @Override
     public void deleteById(long id) {
+        // check if exists by id
+        getById(id);
+
         Map<String, Object> params = Collections.singletonMap("id", id);
         namedParameterJdbcOperations.update(
                 "delete from book where id = :id", params
@@ -58,28 +90,81 @@ public class BookDaoJdbc implements BookDao {
 
     @Override
     public Book getById(long id) {
-        Book book = null;
         try {
             Map<String, Object> params = Collections.singletonMap("bookId", id);
-            book = namedParameterJdbcOperations.queryForObject("select b.id        as bookId, " +
-                                                                 "       a.id         as authorId," +
-                                                                 "       a.firstName  as authorFirstName," +
-                                                                 "       a.lastName   as authorLastName," +
-                                                                 "       g.id         as genreId, " +
-                                                                 "       g.genreName  as genreName, " +
-                                                                 "       b.title      as bookTitle" +
-                                                                 "  from book b" +
-                                                                 " inner join author a" +
-                                                                 "         on a.id = b.authorId" +
-                                                                 " inner join genre g" +
-                                                                 "         on g.id = b.genreId" +
-                                                                 " where b.id = :bookId", params, new BookMapper());
+            Book book = namedParameterJdbcOperations.queryForObject("select b.id        as bookId, " +
+                                                                       "       a.id         as authorId," +
+                                                                        "       a.firstName  as authorFirstName," +
+                                                                        "       a.lastName   as authorLastName," +
+                                                                        "       g.id         as genreId, " +
+                                                                        "       g.genreName  as genreName, " +
+                                                                        "       b.title      as bookTitle" +
+                                                                        "  from book b" +
+                                                                        " inner join author a" +
+                                                                        "         on a.id = b.authorId" +
+                                                                        " inner join genre g" +
+                                                                        "         on g.id = b.genreId" +
+                                                                        " where b.id = :bookId", params, new BookMapper());
+            return book;
         }
         catch (EmptyResultDataAccessException e) {
-            book = null;
+            throw new NoDataFoundException();
         }
+    };
 
-        return book;
+    @Override
+    public Book getByTitle(String title) {
+        try {
+            Map<String, Object> params = Collections.singletonMap("title", title);
+            Book book = namedParameterJdbcOperations.queryForObject("select b.id        as bookId, " +
+                                                                       "       a.id         as authorId," +
+                                                                       "       a.firstName  as authorFirstName," +
+                                                                       "       a.lastName   as authorLastName," +
+                                                                       "       g.id         as genreId, " +
+                                                                       "       g.genreName  as genreName, " +
+                                                                       "       b.title      as bookTitle" +
+                                                                       "  from book b" +
+                                                                       " inner join author a" +
+                                                                       "         on a.id = b.authorId" +
+                                                                       " inner join genre g" +
+                                                                       "         on g.id = b.genreId" +
+                                                                       " where b.title = :title", params, new BookMapper());
+            return book;
+        }
+        catch (EmptyResultDataAccessException e) {
+            throw new NoDataFoundException();
+        }
+    };
+
+    @Override
+    public Book getByParam(long authorId, long genreId, String title) {
+        try {
+            MapSqlParameterSource params = new MapSqlParameterSource();
+            params.addValue("authorId", authorId);
+            params.addValue("genreId", genreId);
+            params.addValue("title", title);
+
+            Book book = namedParameterJdbcOperations.queryForObject("select b.id        as bookId, " +
+                            "       a.id         as authorId," +
+                            "       a.firstName  as authorFirstName," +
+                            "       a.lastName   as authorLastName," +
+                            "       g.id         as genreId, " +
+                            "       g.genreName  as genreName, " +
+                            "       b.title      as bookTitle" +
+                            "  from book b" +
+                            " inner join author a" +
+                            "         on a.id = b.authorId" +
+                            " inner join genre g" +
+                            "         on g.id = b.genreId" +
+                            " where b.authorId = :authorId" +
+                            "   and b.genreId  = :genreId" +
+                            "   and b.title    = :title",
+                    params, new BookMapper());
+            return book;
+        }
+        catch (EmptyResultDataAccessException e) {
+            throw new NoDataFoundException();
+        }
     };
 
     @Override
