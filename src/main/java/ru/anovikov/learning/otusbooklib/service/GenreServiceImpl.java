@@ -30,6 +30,9 @@ public class GenreServiceImpl implements GenreService {
         catch (DuplicateValueException e) {
             consoleService.writeString("error.genre.exists", "");
         }
+        catch (DataInputException e) {
+            consoleService.writeString("error.read.value", "");
+        }
         return null;
     }
 
@@ -49,6 +52,9 @@ public class GenreServiceImpl implements GenreService {
         catch (DuplicateValueException e) {
             consoleService.writeString("error.genre.exists", "");
         }
+        catch (DataInputException e) {
+            consoleService.writeString("error.read.value", "");
+        }
         return null;
     }
 
@@ -61,6 +67,9 @@ public class GenreServiceImpl implements GenreService {
         catch (NoDataFoundException e) {
             consoleService.writeString("error.genre.notexists", "");
         }
+        catch (DataInputException e) {
+            consoleService.writeString("error.read.value", "");
+        }
     }
 
     @Override
@@ -70,6 +79,9 @@ public class GenreServiceImpl implements GenreService {
         }
         catch (NoDataFoundException e) {
             consoleService.writeString("error.genre.notexists", "");
+        }
+        catch (DataInputException e) {
+            consoleService.writeString("error.read.value", "");
         }
         return null;
     }
@@ -84,6 +96,9 @@ public class GenreServiceImpl implements GenreService {
         catch (NoDataFoundException e) {
             consoleService.writeString("error.genre.notexists", "");
         }
+        catch (DataInputException e) {
+            consoleService.writeString("error.read.value", "");
+        }
         return null;
     }
 
@@ -96,6 +111,9 @@ public class GenreServiceImpl implements GenreService {
         }
         catch (NoDataFoundException e) {
             consoleService.writeString("error.genre.notexists", "");
+        }
+        catch (DataInputException e) {
+            consoleService.writeString("error.read.value", "");
         }
         return null;
     }

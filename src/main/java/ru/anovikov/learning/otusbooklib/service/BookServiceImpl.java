@@ -93,6 +93,9 @@ public class BookServiceImpl implements BookService{
         catch (NoDataFoundException e) {
             consoleService.writeString("error.book.notexists", "");
         }
+        catch (DataInputException e) {
+            consoleService.writeString("error.read.value", "");
+        }
     }
 
     @Override
@@ -104,6 +107,9 @@ public class BookServiceImpl implements BookService{
         }
         catch (NoDataFoundException e) {
             consoleService.writeString("error.book.notexists", "");
+        }
+        catch (DataInputException e) {
+            consoleService.writeString("error.read.value", "");
         }
         return null;
     };
@@ -117,6 +123,9 @@ public class BookServiceImpl implements BookService{
         }
         catch (NoDataFoundException e) {
             consoleService.writeString("error.book.notexists", "");
+        }
+        catch (DataInputException e) {
+            consoleService.writeString("error.read.value", "");
         }
         return null;
     };

@@ -31,6 +31,9 @@ public class AuthorServiceImpl implements AuthorService {
         catch (DuplicateValueException e) {
             consoleService.writeString("error.author.exists", "");
         }
+        catch (DataInputException e) {
+            consoleService.writeString("error.read.value", "");
+        }
         return null;
     }
 
@@ -51,6 +54,9 @@ public class AuthorServiceImpl implements AuthorService {
         catch (DuplicateValueException e) {
             consoleService.writeString("error.author.exists", "");
         }
+        catch (DataInputException e) {
+            consoleService.writeString("error.read.value", "");
+        }
         return null;
     }
 
@@ -62,6 +68,9 @@ public class AuthorServiceImpl implements AuthorService {
         }
         catch (NoDataFoundException e) {
             consoleService.writeString("error.author.notexists", "");
+        }
+        catch (DataInputException e) {
+            consoleService.writeString("error.read.value", "");
         }
     }
 
@@ -76,6 +85,9 @@ public class AuthorServiceImpl implements AuthorService {
         catch (NoDataFoundException e) {
             consoleService.writeString("error.author.notexists", "");
         }
+        catch (DataInputException e) {
+            consoleService.writeString("error.read.value", "");
+        }
         return null;
     }
 
@@ -88,6 +100,9 @@ public class AuthorServiceImpl implements AuthorService {
         catch (NoDataFoundException e) {
             consoleService.writeString("error.author.notexists", "");
         }
+        catch (DataInputException e) {
+            consoleService.writeString("error.read.value", "");
+        }
         return null;
     };
 
@@ -98,6 +113,9 @@ public class AuthorServiceImpl implements AuthorService {
         }
         catch (NoDataFoundException e) {
             consoleService.writeString("error.author.notexists", "");
+        }
+        catch (DataInputException e) {
+            consoleService.writeString("error.read.value", "");
         }
         return null;
     }

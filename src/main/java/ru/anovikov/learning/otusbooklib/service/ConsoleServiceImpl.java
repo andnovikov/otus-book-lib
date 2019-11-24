@@ -41,6 +41,10 @@ public class ConsoleServiceImpl implements ConsoleService {
         try {
             System.out.print(messageSource.getMessage(message, new String[] {""}, locale) + " ");
             result = reader.readLine();
+
+            if (result.equalsIgnoreCase("")) {
+                throw new DataInputException();
+            }
         }
         catch (IOException e) {
             System.out.print(messageSource.getMessage("error.read.value", new String[] {""}, locale) + " " + e.getMessage());
