@@ -55,8 +55,8 @@ class BookDaoJdbcTest {
 
     @Test
     void shouldUpdateBook() {
-        Author author = authorService.getById(FIELD_UPD_AUTHORID);
-        Genre genre = genreService.getById(FIELD_UPD_GENREID);
+        Author author = authorService.findById(FIELD_UPD_AUTHORID);
+        Genre genre = genreService.findById(FIELD_UPD_GENREID);
         Book book = new Book(FIELD_UPD_ID, author, genre, FIELD_UPD_TITLE);
         bookDaoJdbc.update(book);
         assertThat(bookDaoJdbc.getById(FIELD_UPD_ID))

@@ -20,109 +20,35 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public Genre insert() {
-        try {
-            String genreName = consoleService.readString("read.genre.genrename");
-            Genre genre = new Genre(0, genreName);
-            genre = genreDao.insert(genre);
-            return genre;
-        }
-        catch (DuplicateValueException e) {
-            consoleService.writeString("error.genre.exists", "");
-        }
-        catch (DataInputException e) {
-            consoleService.writeString("error.read.value", "");
-        }
-        return null;
+    public Genre insert(String genreName) {
+        Genre genre = new Genre(0, genreName);
+        genre = genreDao.insert(genre);
+        return genre;
     }
 
     @Override
-    public Genre update() {
-        try {
-            long id = consoleService.readLong("read.genre.id");
-            String genreName = consoleService.readString("read.genre.genrename");
-            Genre genre = new Genre(id, genreName);
-            genreDao.update(genre);
-            genre = genreDao.getById(id);
-            return genre;
-        }
-        catch (NoDataFoundException e) {
-            consoleService.writeString("error.genre.notexists", "");
-        }
-        catch (DuplicateValueException e) {
-            consoleService.writeString("error.genre.exists", "");
-        }
-        catch (DataInputException e) {
-            consoleService.writeString("error.read.value", "");
-        }
-        return null;
+    public Genre update(long id, String genreName) {
+        Genre genre = new Genre(id, genreName);
+        genreDao.update(genre);
+        genre = genreDao.getById(id);
+        return genre;
     }
 
     @Override
-    public void delete() {
-        try {
-            long id = consoleService.readLong("read.genre.id");
-            genreDao.delete(id);
-        }
-        catch (NoDataFoundException e) {
-            consoleService.writeString("error.genre.notexists", "");
-        }
-        catch (DataInputException e) {
-            consoleService.writeString("error.read.value", "");
-        }
+    public void delete(long id) {
+        genreDao.delete(id);
     }
 
     @Override
-    public Genre getById(long id){
-        try {
-            return genreDao.getById(id);
-        }
-        catch (NoDataFoundException e) {
-            consoleService.writeString("error.genre.notexists", "");
-        }
-        catch (DataInputException e) {
-            consoleService.writeString("error.read.value", "");
-        }
-        return null;
+    public Genre findById(long id){
+        Genre genre = genreDao.getById(id);
+        return genre;
     }
 
     @Override
-    public Genre findByName(){
-        try {
-            String genreName = consoleService.readString("read.genre.genrename");
-            Genre genre = genreDao.getByName(genreName);
-            return genre;
-        }
-        catch (NoDataFoundException e) {
-            consoleService.writeString("error.genre.notexists", "");
-        }
-        catch (DataInputException e) {
-            consoleService.writeString("error.read.value", "");
-        }
-        return null;
+    public Genre findByName(String genreName){
+        Genre genre = genreDao.getByName(genreName);
+        return genre;
     }
-
-    @Override
-    public Genre findById(){
-        try {
-            long id = consoleService.readLong("read.genre.id");
-            Genre genre = genreDao.getById(id);
-            return genre;
-        }
-        catch (NoDataFoundException e) {
-            consoleService.writeString("error.genre.notexists", "");
-        }
-        catch (DataInputException e) {
-            consoleService.writeString("error.read.value", "");
-        }
-        return null;
-    }
-
-    @Override
-    public void print(Genre genre) {
-        if (genre != null) {
-            consoleService.writeString("table.genre", genre.toString());
-        }
-    };
 
 }

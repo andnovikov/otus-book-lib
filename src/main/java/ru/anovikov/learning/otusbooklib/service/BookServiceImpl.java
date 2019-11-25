@@ -26,120 +26,39 @@ public class BookServiceImpl implements BookService{
     }
 
     @Override
-    public Book insert() {
-        try {
-            Author author = authorService.findByName();
-
-            if (author == null) {
-                throw  new DataInputException();
-            }
-
-            Genre genre = genreService.findByName();
-            if (genre == null) {
-                throw  new DataInputException();
-            }
-
-            String title = consoleService.readString("read.book.title");
-            Book book = new Book(0, author, genre, title);
-            book = bookDao.insert(book);
-            return book;
-        }
-        catch (DuplicateValueException e) {
-            consoleService.writeString("error.book.exists", "");
-        }
-        catch (DataInputException e) {
-            consoleService.writeString("error.book.input", "");
-        }
-        return null;
+    public Book insert(Author author, Genre genre, String title) {
+        Book book = new Book(0, author, genre, title);
+        book = bookDao.insert(book);
+        return book;
     }
 
     @Override
-    public Book update() {
-        try {
-            long id = consoleService.readLong("read.book.id");
-            Author author = authorService.findByName();
-            if (author == null) {
-                throw  new DataInputException();
-            }
-
-            Genre genre = genreService.findByName();
-            if (genre == null) {
-                throw  new DataInputException();
-            }
-
-            String title = consoleService.readString("read.book.title");
-            Book book = new Book(id, author, genre, title);
-            book = bookDao.update(book);
-            return book;
-        }
-        catch (NoDataFoundException e) {
-            consoleService.writeString("error.book.notexists", "");
-        }
-        catch (DuplicateValueException e) {
-            consoleService.writeString("error.book.exists", "");
-        }
-        catch (DataInputException e) {
-            consoleService.writeString("error.book.input", "");
-        }
-        return null;
+    public Book update(long id, Author author, Genre genre, String title) {
+        Book book = new Book(id, author, genre, title);
+        book = bookDao.update(book);
+        return book;
     }
 
     @Override
-    public void delete() {
-        try {
-            long id = consoleService.readLong("read.book.id");
-            bookDao.delete(id);
-        }
-        catch (NoDataFoundException e) {
-            consoleService.writeString("error.book.notexists", "");
-        }
-        catch (DataInputException e) {
-            consoleService.writeString("error.read.value", "");
-        }
+    public void delete(long id) {
+        bookDao.delete(id);
     }
 
     @Override
-    public Book findById() {
-        try {
-            long id = consoleService.readLong("read.book.id");
-            Book book = bookDao.getById(id);
-            return book;
-        }
-        catch (NoDataFoundException e) {
-            consoleService.writeString("error.book.notexists", "");
-        }
-        catch (DataInputException e) {
-            consoleService.writeString("error.read.value", "");
-        }
-        return null;
+    public Book findById(long id) {
+        Book book = bookDao.getById(id);
+        return book;
     };
 
     @Override
-    public Book findByTitle() {
-        try {
-            String title = consoleService.readString("read.book.title");
-            Book book = bookDao.getByTitle(title);
-            return book;
-        }
-        catch (NoDataFoundException e) {
-            consoleService.writeString("error.book.notexists", "");
-        }
-        catch (DataInputException e) {
-            consoleService.writeString("error.read.value", "");
-        }
-        return null;
+    public Book findByTitle(String title) {
+        Book book = bookDao.getByTitle(title);
+        return book;
     };
 
     @Override
     public Book getById(long id) {
         return bookDao.getById(id);
-    };
-
-    @Override
-    public void print(Book book) {
-        if (book != null) {
-            consoleService.writeString("table.book", book.toString());
-        }
     };
 
 }

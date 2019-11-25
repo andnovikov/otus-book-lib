@@ -4,18 +4,14 @@ import ru.anovikov.learning.otusbooklib.domain.Author;
 
 public interface AuthorService {
 
-    Author insert();
+    Author insert(String firstName, String lastName);
 
-    Author update();
+    Author update(long id, String firstName, String lastName);
 
-    void delete();
+    void delete(long id);
 
-    Author findByName();
+    Author findByName(String firstName, String lastName);
 
-    Author findById();
-
-    Author getById(long id);
-
-    void print(Author author);
+    Author findById(long id);
 
 }

@@ -13,6 +13,7 @@ import ru.anovikov.learning.otusbooklib.domain.Genre;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -53,10 +54,10 @@ class BookServiceImplTest {
     @Test
     void shouldReturnCorrectBook() {
         Author author = new Author(FIELD_AUTHOR_ID, FIELD_AUTHOR_FIRSTNAME, FIELD_AUTHOR_LASTNAME);
-        when(authorService.findByName()).thenReturn(author);
+        when(authorService.findByName(anyString(), anyString())).thenReturn(author);
 
         Genre genre = new Genre(FIELD_GENRE_ID, FIELD_GENRE_NAME);
-        when(genreService.findByName()).thenReturn(genre);
+        when(genreService.findByName(anyString())).thenReturn(genre);
 
         when(consoleService.readString(FIELD_READ_TITLE)).thenReturn(FIELD_BOOK_TITLE);
 
@@ -64,16 +65,16 @@ class BookServiceImplTest {
 
         when(bookDao.insert(any())).thenReturn(book);
 
-        assertEquals(bookService.insert(), book);
+        assertEquals(bookService.insert(author, genre, FIELD_BOOK_TITLE), book);
     }
 
     @Test
     void shouldReturnUpdatedBook() {
         Author author = new Author(FIELD_AUTHOR_ID, FIELD_AUTHOR_FIRSTNAME, FIELD_AUTHOR_LASTNAME);
-        when(authorService.findByName()).thenReturn(author);
+        when(authorService.findByName(anyString(), anyString())).thenReturn(author);
 
         Genre genre = new Genre(FIELD_GENRE_ID, FIELD_GENRE_NAME);
-        when(genreService.findByName()).thenReturn(genre);
+        when(genreService.findByName(anyString())).thenReturn(genre);
 
         when(consoleService.readLong(FIELD_READ_ID)).thenReturn(FIELD_BOOK_ID);
         when(consoleService.readString(FIELD_READ_TITLE)).thenReturn(FIELD_BOOK_TITLE);
@@ -82,7 +83,7 @@ class BookServiceImplTest {
 
         when(bookDao.update(any())).thenReturn(book);
 
-        assertEquals(bookService.update(), book);
+        assertEquals(bookService.update(FIELD_BOOK_ID, author, genre, FIELD_BOOK_TITLE), book);
     }
 
 }

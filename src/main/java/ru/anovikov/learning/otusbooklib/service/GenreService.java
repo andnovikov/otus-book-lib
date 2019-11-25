@@ -4,17 +4,14 @@ import ru.anovikov.learning.otusbooklib.domain.Genre;
 
 public interface GenreService {
 
-    Genre insert();
+    Genre insert(String genreName);
 
-    Genre update();
+    Genre update(long id, String genreName);
 
-    void delete();
+    void delete(long id);
 
-    Genre findByName();
+    Genre findById(long id);
 
-    Genre findById();
+    Genre findByName(String genreName);
 
-    Genre getById(long id);
-
-    void print(Genre genre);
 }
