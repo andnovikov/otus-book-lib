@@ -68,8 +68,8 @@ public class BookServiceImpl implements BookService{
             }
 
             String title = consoleService.readString("read.book.title");
-            Book book = new Book(0, author, genre, title);
-            book = bookDao.update(book, id);
+            Book book = new Book(id, author, genre, title);
+            book = bookDao.update(book);
             return book;
         }
         catch (NoDataFoundException e) {
@@ -88,7 +88,7 @@ public class BookServiceImpl implements BookService{
     public void delete() {
         try {
             long id = consoleService.readLong("read.book.id");
-            bookDao.deleteById(id);
+            bookDao.delete(id);
         }
         catch (NoDataFoundException e) {
             consoleService.writeString("error.book.notexists", "");

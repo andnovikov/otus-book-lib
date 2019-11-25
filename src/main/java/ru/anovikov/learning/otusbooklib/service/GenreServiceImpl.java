@@ -41,8 +41,8 @@ public class GenreServiceImpl implements GenreService {
         try {
             long id = consoleService.readLong("read.genre.id");
             String genreName = consoleService.readString("read.genre.genrename");
-            Genre genre = new Genre(0, genreName);
-            genreDao.update(genre, id);
+            Genre genre = new Genre(id, genreName);
+            genreDao.update(genre);
             genre = genreDao.getById(id);
             return genre;
         }
@@ -62,7 +62,7 @@ public class GenreServiceImpl implements GenreService {
     public void delete() {
         try {
             long id = consoleService.readLong("read.genre.id");
-            genreDao.deleteById(id);
+            genreDao.delete(id);
         }
         catch (NoDataFoundException e) {
             consoleService.writeString("error.genre.notexists", "");

@@ -58,14 +58,14 @@ class BookDaoJdbcTest {
         Author author = authorService.getById(FIELD_UPD_AUTHORID);
         Genre genre = genreService.getById(FIELD_UPD_GENREID);
         Book book = new Book(FIELD_UPD_ID, author, genre, FIELD_UPD_TITLE);
-        bookDaoJdbc.update(book, FIELD_UPD_ID);
+        bookDaoJdbc.update(book);
         assertThat(bookDaoJdbc.getById(FIELD_UPD_ID))
                 .hasFieldOrPropertyWithValue("title", FIELD_UPD_TITLE);
     }
 
     @Test
     void shouldDeleteBook() {
-        bookDaoJdbc.deleteById(FIELD_DEL_ID);
+        bookDaoJdbc.delete(FIELD_DEL_ID);
         assertThrows(NoDataFoundException.class, () -> {bookDaoJdbc.getById(FIELD_DEL_ID);});
     }
 
@@ -89,9 +89,9 @@ class BookDaoJdbcTest {
                 new Genre(FIELD_UPDDUP_GENREID, ""), FIELD_UPDDUP_TITLE);
         bookDaoJdbc.insert(book);
         assertThrows(DuplicateValueException.class, () -> {
-            bookDaoJdbc.update(new Book(0,
+            bookDaoJdbc.update(new Book(FIELD_UPD_ID,
                     new Author(FIELD_UPDDUP_AUTHORID, "",""),
-                    new Genre(FIELD_UPDDUP_GENREID, ""), FIELD_UPDDUP_TITLE), FIELD_UPD_ID);
+                    new Genre(FIELD_UPDDUP_GENREID, ""), FIELD_UPDDUP_TITLE));
         });
     }
 }

@@ -8,9 +8,9 @@ public interface AuthorDao {
 
     Author insert(Author author);
 
-    void update(Author author, long id);
+    void update(Author authorid);
 
-    void deleteById(long id);
+    void delete(long id);
 
     Author getById(long id);
 

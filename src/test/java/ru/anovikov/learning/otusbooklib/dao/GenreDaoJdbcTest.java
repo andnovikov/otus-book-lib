@@ -6,7 +6,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ru.anovikov.learning.otusbooklib.domain.Genre;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
@@ -35,15 +34,15 @@ class GenreDaoJdbcTest {
 
     @Test
     void shouldUpdateGenre() {
-        Genre genre = new Genre(0, FIELD_UPD_GENRENAME);
-        genreDaoJdbc.update(genre, FIELD_UPD_ID);
+        Genre genre = new Genre(FIELD_UPD_ID, FIELD_UPD_GENRENAME);
+        genreDaoJdbc.update(genre);
         assertThat(genreDaoJdbc.getById(FIELD_UPD_ID))
                 .hasFieldOrPropertyWithValue("genreName", FIELD_UPD_GENRENAME);
     }
 
     @Test
     void shouldDeleteGenre() {
-        genreDaoJdbc.deleteById(FIELD_DEL_ID);
+        genreDaoJdbc.delete(FIELD_DEL_ID);
         assertThrows(NoDataFoundException.class, () -> {genreDaoJdbc.getById(FIELD_DEL_ID);});
     }
 
@@ -61,7 +60,7 @@ class GenreDaoJdbcTest {
         Genre genre = new Genre(0, FIELD_UPDDUP_GENRENAME);
         genre = genreDaoJdbc.insert(genre);
         assertThrows(DuplicateValueException.class, () -> {
-            genreDaoJdbc.update(new Genre(0, FIELD_UPDDUP_GENRENAME), FIELD_UPD_ID);
+            genreDaoJdbc.update(new Genre(FIELD_UPD_ID, FIELD_UPDDUP_GENRENAME));
         });
     }
 }

@@ -13,7 +13,6 @@ import ru.anovikov.learning.otusbooklib.domain.Genre;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -81,7 +80,7 @@ class BookServiceImplTest {
 
         Book book = new Book(FIELD_BOOK_ID, author, genre, FIELD_BOOK_TITLE);
 
-        when(bookDao.update(any(), anyLong())).thenReturn(book);
+        when(bookDao.update(any())).thenReturn(book);
 
         assertEquals(bookService.update(), book);
     }

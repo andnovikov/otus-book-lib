@@ -43,8 +43,8 @@ public class AuthorServiceImpl implements AuthorService {
             long id = consoleService.readLong("read.author.id");
             String firstName = consoleService.readString("read.author.firstname");
             String lastName = consoleService.readString("read.author.lastname");
-            Author author = new Author(0, firstName, lastName);
-            authorDao.update(author, id);
+            Author author = new Author(id, firstName, lastName);
+            authorDao.update(author);
             author = authorDao.getById(id);
             return author;
         }
@@ -64,7 +64,7 @@ public class AuthorServiceImpl implements AuthorService {
     public void delete() {
         try {
             long id = consoleService.readLong("read.author.id");
-            authorDao.deleteById(id);
+            authorDao.delete(id);
         }
         catch (NoDataFoundException e) {
             consoleService.writeString("error.author.notexists", "");

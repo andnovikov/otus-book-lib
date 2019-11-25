@@ -30,11 +30,6 @@ public class BookDaoJdbc implements BookDao {
 
     @Override
     public Book insert(Book book) {
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("authorId", book.getAuthor().getId());
-        params.addValue("genreId", book.getGenre().getId());
-        params.addValue("title", book.getTitle());
-
         // check if exists by name
         try {
             Book chkBook = getByParam(book.getAuthor().getId(), book.getGenre().getId(), book.getTitle());
@@ -46,6 +41,10 @@ public class BookDaoJdbc implements BookDao {
             // nothing
         }
 
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("authorId", book.getAuthor().getId());
+        params.addValue("genreId", book.getGenre().getId());
+        params.addValue("title", book.getTitle());
         KeyHolder kh = new GeneratedKeyHolder();
         namedParameterJdbcOperations.update("insert into book (authorId, genreId, title) values (:authorId, :genreId, :title)", params, kh);
         book.setId(kh.getKey().longValue());
@@ -53,18 +52,12 @@ public class BookDaoJdbc implements BookDao {
     };
 
     @Override
-    public Book update(Book book, Long id) {
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("id", id);
-        params.addValue("authorId", book.getAuthor().getId());
-        params.addValue("genreId", book.getGenre().getId());
-        params.addValue("title", book.getTitle());
-
+    public Book update(Book book) {
         // check if exists by id
-        getById(id);
+        getById(book.getId());
         try {
             Book chkBook = getByParam(book.getAuthor().getId(), book.getGenre().getId(), book.getTitle());
-            if (chkBook != null) {
+            if ((chkBook != null) && (book.getId() != chkBook.getId())) {
                 throw new DuplicateValueException();
             }
         }
@@ -72,13 +65,18 @@ public class BookDaoJdbc implements BookDao {
             // nothing
         }
 
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("id", book.getId());
+        params.addValue("authorId", book.getAuthor().getId());
+        params.addValue("genreId", book.getGenre().getId());
+        params.addValue("title", book.getTitle());
         namedParameterJdbcOperations.update("update book set authorId = :authorId, genreId = :genreId, title = :title where id = :id", params);
 
-        return getById(id);
+        return getById(book.getId());
     };
 
     @Override
-    public void deleteById(long id) {
+    public void delete(long id) {
         // check if exists by id
         getById(id);
 

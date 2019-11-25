@@ -39,15 +39,15 @@ class AuthorDaoJdbcTest {
 
     @Test
     void shouldUpateAuthor() {
-        Author author = new Author(0, FIELD_UPD_FIRSTNAME, FIELD_UPD_LASTNAME);
-        authorDaoJdbc.update(author, FIELD_UPD_ID);
+        Author author = new Author(FIELD_UPD_ID, FIELD_UPD_FIRSTNAME, FIELD_UPD_LASTNAME);
+        authorDaoJdbc.update(author);
         assertThat(authorDaoJdbc.getById(FIELD_UPD_ID))
                 .hasFieldOrPropertyWithValue("firstName", FIELD_UPD_FIRSTNAME);
     }
 
     @Test
     void shouldDeleteAuthor() {
-        authorDaoJdbc.deleteById(FIELD_DEL_ID);
+        authorDaoJdbc.delete(FIELD_DEL_ID);
         assertThrows(NoDataFoundException.class, () -> {authorDaoJdbc.getById(FIELD_DEL_ID);});
     }
 
@@ -65,7 +65,7 @@ class AuthorDaoJdbcTest {
         Author author = new Author(0, FIELD_UPDDUP_FIRSTNAME, FIELD_UPDDUP_LASTNAME);
         author = authorDaoJdbc.insert(author);
         assertThrows(DuplicateValueException.class, () -> {
-            authorDaoJdbc.update(new Author(0, FIELD_UPDDUP_FIRSTNAME, FIELD_UPDDUP_LASTNAME), FIELD_UPD_ID);
+            authorDaoJdbc.update(new Author(FIELD_UPD_ID, FIELD_UPDDUP_FIRSTNAME, FIELD_UPDDUP_LASTNAME));
         });
     }
 }

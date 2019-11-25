@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import ru.anovikov.learning.otusbooklib.domain.Author;
 
-import javax.xml.soap.Node;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
@@ -29,10 +28,6 @@ public class AuthorDaoJdbc implements AuthorDao {
 
     @Override
     public Author insert(Author author){
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("firstName", author.getFirstName());
-        params.addValue("lastName", author.getLastName());
-
         // check if exists by name
         try {
             Author chkAuthor = getByName(author.getFirstName(), author.getLastName());
@@ -44,6 +39,9 @@ public class AuthorDaoJdbc implements AuthorDao {
             // nothing
         }
 
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("firstName", author.getFirstName());
+        params.addValue("lastName", author.getLastName());
         KeyHolder kh = new GeneratedKeyHolder();
         namedParameterJdbcOperations.update("insert into author (firstName, lastName) values (:firstName, :lastName)", params, kh);
         author.setId(kh.getKey().longValue());
@@ -51,18 +49,13 @@ public class AuthorDaoJdbc implements AuthorDao {
     }
 
     @Override
-    public void update(Author author, long id){
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("id", id);
-        params.addValue("firstName", author.getFirstName());
-        params.addValue("lastName", author.getLastName());
-
+    public void update(Author author){
         // check if exists by id
-        getById(id);
+        getById(author.getId());
         try {
             // check if exists by name
             Author chkAuthor = getByName(author.getFirstName(), author.getLastName());
-            if (chkAuthor != null) {
+            if ((chkAuthor != null) && (author.getId() != chkAuthor.getId())) {
                 throw new DuplicateValueException();
             }
         }
@@ -70,12 +63,16 @@ public class AuthorDaoJdbc implements AuthorDao {
             // nothing
         }
 
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("id", author.getId());
+        params.addValue("firstName", author.getFirstName());
+        params.addValue("lastName", author.getLastName());
         KeyHolder kh = new GeneratedKeyHolder();
         namedParameterJdbcOperations.update("update author set firstName = :firstName, lastName = :lastName where id = :id", params, kh);
     }
 
     @Override
-    public void deleteById(long id){
+    public void delete(long id){
         // check if exists by id
         getById(id);
 

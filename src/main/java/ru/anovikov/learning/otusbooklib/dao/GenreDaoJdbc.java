@@ -12,7 +12,6 @@ import ru.anovikov.learning.otusbooklib.domain.Genre;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,9 +27,6 @@ public class GenreDaoJdbc implements GenreDao {
 
     @Override
     public Genre insert(Genre genre){
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("genreName", genre.getGenreName());
-
         // check if exists by name
         try {
             Genre chkGenre = getByName(genre.getGenreName());
@@ -42,6 +38,8 @@ public class GenreDaoJdbc implements GenreDao {
             // nothing
         }
 
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("genreName", genre.getGenreName());
         KeyHolder kh = new GeneratedKeyHolder();
         namedParameterJdbcOperations.update("insert into genre (genreName) values (:genreName)", params, kh);
         genre.setId(kh.getKey().longValue());
@@ -49,17 +47,13 @@ public class GenreDaoJdbc implements GenreDao {
     }
 
     @Override
-    public void update(Genre genre, long id){
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("id", id);
-        params.addValue("genreName", genre.getGenreName());
-
+    public void update(Genre genre){
         // check if exists by id
-        getById(id);
+        getById(genre.getId());
         try {
             // check if exists by name
             Genre chkGenre = getByName(genre.getGenreName());
-            if (chkGenre != null) {
+            if ((chkGenre != null) && (genre.getId() != chkGenre.getId())) {
                 throw new DuplicateValueException();
             }
         }
@@ -67,12 +61,15 @@ public class GenreDaoJdbc implements GenreDao {
             // nothing
         }
 
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("id", genre.getId());
+        params.addValue("genreName", genre.getGenreName());
         KeyHolder kh = new GeneratedKeyHolder();
         namedParameterJdbcOperations.update("update genre set genreName = :genreName where id = :id", params, kh);
     }
 
     @Override
-    public void deleteById(long id) {
+    public void delete(long id) {
         // check if exists by id
         getById(id);
 

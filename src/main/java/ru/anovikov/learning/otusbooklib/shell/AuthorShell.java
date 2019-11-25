@@ -5,7 +5,6 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import ru.anovikov.learning.otusbooklib.domain.Author;
 import ru.anovikov.learning.otusbooklib.service.AuthorService;
-import ru.anovikov.learning.otusbooklib.service.ConsoleService;
 
 @ShellComponent
 public class AuthorShell {
