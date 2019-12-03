@@ -1,11 +1,32 @@
 package ru.anovikov.learning.otusbooklib.domain;
 
+import javax.persistence.*;
+
+@Entity
+@NamedQuery(name="Book.findAll", query="select b from Book b")
 public class Book {
 
+    @Id
+    @GeneratedValue
     private long id;
-    private final Author author;
-    private final Genre genre;
-    private final String title;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "authorId")
+    private Author author;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "genreId")
+    private Genre genre;
+
+    private String title;
+
+    public Book() {};
+
+    public Book(Author author, Genre genre, String title){
+        this.genre = genre;
+        this.title = title;
+        this.author = author;
+    }
 
     public Book(long id, Author author, Genre genre, String title){
         this.id = id;
@@ -32,6 +53,18 @@ public class Book {
 
     public Author getAuthor() {
         return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
+
+    public void setGenre(Genre genre) {
+        this.genre = genre;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     @Override

@@ -1,10 +1,10 @@
-package ru.anovikov.learning.otusbooklib.dao;
+package ru.anovikov.learning.otusbooklib.repository;
 
 import ru.anovikov.learning.otusbooklib.domain.Book;
 
 import java.util.List;
 
-public interface BookDao {
+public interface BookRepository {
 
     Book insert(Book book);
 

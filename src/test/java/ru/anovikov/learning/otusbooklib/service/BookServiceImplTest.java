@@ -6,7 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.anovikov.learning.otusbooklib.dao.BookDao;
+import ru.anovikov.learning.otusbooklib.repository.BookRepository;
 import ru.anovikov.learning.otusbooklib.domain.Author;
 import ru.anovikov.learning.otusbooklib.domain.Book;
 import ru.anovikov.learning.otusbooklib.domain.Genre;
@@ -44,7 +44,7 @@ class BookServiceImplTest {
     ConsoleService consoleService;
 
     @Mock
-    BookDao bookDao;
+    BookRepository bookDao;
 
     @Before
     public void init() {

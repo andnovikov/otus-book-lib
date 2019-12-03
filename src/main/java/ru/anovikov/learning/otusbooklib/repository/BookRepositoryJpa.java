@@ -1,32 +1,29 @@
-package ru.anovikov.learning.otusbooklib.dao;
+package ru.anovikov.learning.otusbooklib.repository;
 
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import org.springframework.transaction.annotation.Transactional;
 import ru.anovikov.learning.otusbooklib.domain.Author;
 import ru.anovikov.learning.otusbooklib.domain.Book;
 import ru.anovikov.learning.otusbooklib.domain.Genre;
 
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-@SuppressWarnings({"SqlNoDataSourceInspection", "ConstantConditions", "SqlDialectInspection"})
+@SuppressWarnings("JpaQlInspections")
 @Repository
-public class BookDaoJdbc implements BookDao {
+@Transactional
+public class BookRepositoryJpa implements BookRepository {
 
-    NamedParameterJdbcOperations namedParameterJdbcOperations;
-
-    public BookDaoJdbc(NamedParameterJdbcOperations namedParameterJdbcOperations){
-        this.namedParameterJdbcOperations = namedParameterJdbcOperations;
-    }
+    @PersistenceContext
+    private EntityManager em;
 
     @Override
     public Book insert(Book book) {
@@ -41,13 +38,9 @@ public class BookDaoJdbc implements BookDao {
             // nothing
         }
 
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("authorId", book.getAuthor().getId());
-        params.addValue("genreId", book.getGenre().getId());
-        params.addValue("title", book.getTitle());
-        KeyHolder kh = new GeneratedKeyHolder();
-        namedParameterJdbcOperations.update("insert into book (authorId, genreId, title) values (:authorId, :genreId, :title)", params, kh);
-        book.setId(kh.getKey().longValue());
+        em.persist(book);
+        // TODO: Check
+        // em.refresh(book);
         return book;
     };
 
@@ -64,14 +57,14 @@ public class BookDaoJdbc implements BookDao {
         catch (NoDataFoundException e) {
             // nothing
         }
-
+        /*
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("id", book.getId());
         params.addValue("authorId", book.getAuthor().getId());
         params.addValue("genreId", book.getGenre().getId());
         params.addValue("title", book.getTitle());
         namedParameterJdbcOperations.update("update book set authorId = :authorId, genreId = :genreId, title = :title where id = :id", params);
-
+*/
         return getById(book.getId());
     };
 
@@ -79,16 +72,20 @@ public class BookDaoJdbc implements BookDao {
     public void delete(long id) {
         // check if exists by id
         getById(id);
-
+/*
         Map<String, Object> params = Collections.singletonMap("id", id);
         namedParameterJdbcOperations.update(
                 "delete from book where id = :id", params
         );
+
+ */
     };
 
     @Override
     public Book getById(long id) {
         try {
+            //TODO getById
+            /*
             Map<String, Object> params = Collections.singletonMap("bookId", id);
             Book book = namedParameterJdbcOperations.queryForObject("select b.id        as bookId, " +
                                                                        "       a.id         as authorId," +
@@ -103,16 +100,21 @@ public class BookDaoJdbc implements BookDao {
                                                                         " inner join genre g" +
                                                                         "         on g.id = b.genreId" +
                                                                         " where b.id = :bookId", params, new BookMapper());
+
             return book;
+            */
         }
-        catch (EmptyResultDataAccessException e) {
+        catch (EmptyResultDataAccessException | NoResultException e) {
             throw new NoDataFoundException();
         }
+        return null;
     };
 
     @Override
     public Book getByTitle(String title) {
         try {
+            // TODO getByTitle
+            /*
             Map<String, Object> params = Collections.singletonMap("title", title);
             Book book = namedParameterJdbcOperations.queryForObject("select b.id        as bookId, " +
                                                                        "       a.id         as authorId," +
@@ -128,15 +130,20 @@ public class BookDaoJdbc implements BookDao {
                                                                        "         on g.id = b.genreId" +
                                                                        " where b.title = :title", params, new BookMapper());
             return book;
+
+             */
         }
-        catch (EmptyResultDataAccessException e) {
+        catch (EmptyResultDataAccessException | NoResultException e) {
             throw new NoDataFoundException();
         }
+        return null;
     };
 
     @Override
     public Book getByParam(long authorId, long genreId, String title) {
         try {
+            //TODO getByParam
+            /*
             MapSqlParameterSource params = new MapSqlParameterSource();
             params.addValue("authorId", authorId);
             params.addValue("genreId", genreId);
@@ -159,14 +166,18 @@ public class BookDaoJdbc implements BookDao {
                             "   and b.title    = :title",
                     params, new BookMapper());
             return book;
+
+             */
         }
-        catch (EmptyResultDataAccessException e) {
+        catch (EmptyResultDataAccessException | NoResultException e) {
             throw new NoDataFoundException();
         }
+        return null;
     };
 
     @Override
     public List<Book> getAll() {
+        /*
         return namedParameterJdbcOperations.query("select b.id        as bookId, " +
                                                      "       a.id         as authorId," +
                                                      "       a.firstName  as authorFirstName," +
@@ -179,8 +190,12 @@ public class BookDaoJdbc implements BookDao {
                                                      "         on a.id = b.authorId" +
                                                      " inner join genre g" +
                                                      "         on g.id = b.genreId", new BookMapper());
+
+         */
+        return null;
     };
 
+    /*
     private static class BookMapper implements RowMapper<Book>{
 
         @Override
@@ -196,4 +211,5 @@ public class BookDaoJdbc implements BookDao {
             return new Book(bookId, new Author(authorId, authorFirstName, authorLastName), new Genre(genreId, genreName), bookTitle);
         }
     }
+    */
 }

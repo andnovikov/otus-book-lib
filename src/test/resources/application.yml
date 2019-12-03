@@ -4,3 +4,5 @@ spring:
   shell:
     interactive:
       enabled: false
+  datasource:
+    data: data.sql

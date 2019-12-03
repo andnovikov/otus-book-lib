@@ -2,19 +2,17 @@ package ru.anovikov.learning.otusbooklib.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.anovikov.learning.otusbooklib.dao.DuplicateValueException;
-import ru.anovikov.learning.otusbooklib.dao.GenreDao;
-import ru.anovikov.learning.otusbooklib.dao.NoDataFoundException;
+import ru.anovikov.learning.otusbooklib.repository.GenreRepository;
 import ru.anovikov.learning.otusbooklib.domain.Genre;
 
 @Service
 public class GenreServiceImpl implements GenreService {
 
-    private GenreDao genreDao;
+    private GenreRepository genreDao;
     private ConsoleService consoleService;
 
     @Autowired
-    public GenreServiceImpl(GenreDao genreDao, ConsoleService consoleService) {
+    public GenreServiceImpl(GenreRepository genreDao, ConsoleService consoleService) {
         this.genreDao = genreDao;
         this.consoleService = consoleService;
     }

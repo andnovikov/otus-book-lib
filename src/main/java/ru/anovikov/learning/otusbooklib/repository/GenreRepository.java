@@ -1,10 +1,10 @@
-package ru.anovikov.learning.otusbooklib.dao;
+package ru.anovikov.learning.otusbooklib.repository;
 
 import ru.anovikov.learning.otusbooklib.domain.Genre;
 
 import java.util.List;
 
-public interface GenreDao {
+public interface GenreRepository {
 
     Genre insert(Genre genre);
 

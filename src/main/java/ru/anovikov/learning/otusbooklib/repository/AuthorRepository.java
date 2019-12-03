@@ -1,14 +1,14 @@
-package ru.anovikov.learning.otusbooklib.dao;
+package ru.anovikov.learning.otusbooklib.repository;
 
 import ru.anovikov.learning.otusbooklib.domain.Author;
 
 import java.util.List;
 
-public interface AuthorDao {
+public interface AuthorRepository {
 
     Author insert(Author author);
 
-    void update(Author authorid);
+    void update(Author author);
 
     void delete(long id);
 

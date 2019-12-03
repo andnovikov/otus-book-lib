@@ -1,9 +1,26 @@
 package ru.anovikov.learning.otusbooklib.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+
+@Entity
+@NamedQuery(name="Genre.findAll", query="select g from Genre g")
+@NamedQuery(name="Genre.getByName", query="select g from Genre g where g.genreName = :genreName")
 public class Genre {
 
+    @Id
+    @GeneratedValue
     private long id;
-    private final String genreName;
+    private String genreName;
+
+    public Genre() {};
+
+    public Genre(String genreName) {
+        this.id = id;
+        this.genreName = genreName;
+    }
 
     public Genre(long id, String genreName) {
         this.id = id;
@@ -20,6 +37,10 @@ public class Genre {
 
     public String getGenreName() {
         return genreName;
+    }
+
+    public void setGenreName(String genreName) {
+        this.genreName = genreName;
     }
 
     @Override
