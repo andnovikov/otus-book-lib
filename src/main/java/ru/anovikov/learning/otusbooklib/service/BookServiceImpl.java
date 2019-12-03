@@ -2,11 +2,10 @@ package ru.anovikov.learning.otusbooklib.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.anovikov.learning.otusbooklib.repository.BookRepository;
 import ru.anovikov.learning.otusbooklib.domain.Author;
 import ru.anovikov.learning.otusbooklib.domain.Book;
 import ru.anovikov.learning.otusbooklib.domain.Genre;
-import ru.anovikov.learning.otusbooklib.repository.BookRepository;
-import ru.anovikov.learning.otusbooklib.repository.NoDataFoundException;
 
 @Service
 public class BookServiceImpl implements BookService{
@@ -26,39 +25,15 @@ public class BookServiceImpl implements BookService{
 
     @Override
     public Book insert(Author author, Genre genre, String title) {
-        // check for duplicate values
-        try {
-            Book foundBook = bookRepository.findByParam(author.getId(), genre.getId(), title);
-            if (foundBook != null) {
-                throw new DuplicateValueException();
-            }
-        }
-        catch (NoDataFoundException e) {
-            // do nothing
-        }
-
-        Book book = new Book(author, genre, title);
-        book = bookRepository.save(book);
+        Book book = new Book(0, author, genre, title);
+        book = bookRepository.insert(book);
         return book;
     }
 
     @Override
     public Book update(long id, Author author, Genre genre, String title) {
-        //chek if exists
-        bookRepository.findById(id);
-        // check for duplicate values
-        try {
-            Book foundBook = bookRepository.findByParam(author.getId(), genre.getId(), title);
-            if (foundBook != null) {
-                throw new DuplicateValueException();
-            }
-        }
-        catch (NoDataFoundException e) {
-            // do nothing
-        }
-
         Book book = new Book(id, author, genre, title);
-        book = bookRepository.save(book);
+        book = bookRepository.update(book);
         return book;
     }
 
@@ -69,11 +44,19 @@ public class BookServiceImpl implements BookService{
 
     @Override
     public Book findById(long id) {
-        return bookRepository.findById(id);
+        Book book = bookRepository.getById(id);
+        return book;
     };
 
     @Override
     public Book findByTitle(String title) {
-        return bookRepository.findByTitle(title);
+        Book book = bookRepository.getByTitle(title);
+        return book;
     };
+
+    @Override
+    public Book getById(long id) {
+        return bookRepository.getById(id);
+    };
+
 }

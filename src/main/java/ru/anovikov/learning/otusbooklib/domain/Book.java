@@ -3,14 +3,11 @@ package ru.anovikov.learning.otusbooklib.domain;
 import javax.persistence.*;
 
 @Entity
-@NamedQuery(name="Book.findAll", query="select b from Book b join fetch b.author join fetch b.genre")
-@NamedQuery(name="Book.findById", query="select b from Book b join fetch b.author join fetch b.genre where b.id = :bookId")
-@NamedQuery(name="Book.findByTitle", query="select b from Book b join fetch b.author join fetch b.genre where b.title = :title")
-@NamedQuery(name="Book.findByParam", query="select b from Book b join fetch b.author join fetch b.genre where b.author.id = :authorId and b.genre.id = :genreId and b.title = :title")
+@NamedQuery(name="Book.findAll", query="select b from Book b")
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -21,7 +18,6 @@ public class Book {
     @JoinColumn(name = "genreId")
     private Genre genre;
 
-    @Column(name = "title", nullable = false)
     private String title;
 
     public Book() {};

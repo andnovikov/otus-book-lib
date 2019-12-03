@@ -9,8 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @SuppressWarnings("JpaQlInspection")
 @Repository
@@ -21,36 +20,59 @@ public class AuthorRepositoryJpa implements AuthorRepository {
     private EntityManager em;
 
     @Override
-    public Author save(Author author) {
-        if (author.getId() <= 0) {
-            em.persist(author);
-            return author;
-        } else {
-            em.merge(author);
-            return author;
+    public Author insert(Author author) {
+        // check if exists by name
+        try {
+            Author chkAuthor = getByName(author.getFirstName(), author.getLastName());
+            if (chkAuthor != null) {
+                throw new DuplicateValueException();
+            }
         }
+        catch (NoDataFoundException e) {
+            // nothing
+        }
+        em.persist(author);
+        return author;
+    }
+
+    @Override
+    public void update(Author author) {
+        // check if exists by id
+        getById(author.getId());
+        try {
+            // check if exists by name
+            Author chkAuthor = getByName(author.getFirstName(), author.getLastName());
+            if ((chkAuthor != null) && (author.getId() != chkAuthor.getId())) {
+                throw new DuplicateValueException();
+            }
+        }
+        catch (NoDataFoundException e) {
+            // nothing
+        }
+        em.merge(author);
     }
 
     @Override
     public void delete(long id) {
         // check if exists by id
-        Author author = findById(id);
+        Author author = getById(id);
         em.remove(author);
     }
 
     @Override
-    public Author findById(long id) {
-        Optional<Author> foundEntity = Optional.ofNullable(em.find(Author.class, id));
-        if (!foundEntity.isPresent()) {
+    public Author getById(long id) {
+        try {
+            return em.find(Author.class, id);
+        }
+        catch (EmptyResultDataAccessException | NoResultException e) {
             throw new NoDataFoundException();
         }
-        return foundEntity.get();
     }
 
     @Override
-    public Author findByName(String firstName, String lastName) {
+    public Author getByName(String firstName, String lastName) {
         try {
-            TypedQuery<Author> query = em.createNamedQuery("Author.findByName", Author.class);
+            TypedQuery<Author> query = em.createNamedQuery("Author.getByName", Author.class);
             query.setParameter("firstName", firstName);
             query.setParameter("lastName", lastName);
             return query.getSingleResult();
@@ -62,7 +84,9 @@ public class AuthorRepositoryJpa implements AuthorRepository {
 
     @Override
     public List<Author> getAll() {
-        TypedQuery<Author> query = em.createNamedQuery("Author.findAll", Author.class);
+        TypedQuery<Author> query = em.createQuery(
+                "select a from author a",
+                Author.class);
         return query.getResultList();
     }
 }

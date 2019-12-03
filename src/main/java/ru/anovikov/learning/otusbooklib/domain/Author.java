@@ -1,21 +1,19 @@
 package ru.anovikov.learning.otusbooklib.domain;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 
 @Entity
-@Table(name = "author")
 @NamedQuery(name="Author.findAll", query="select a from Author a")
-@NamedQuery(name="Author.findByName", query="select a from Author a where a.firstName = :firstName and a.lastName = : lastName")
+@NamedQuery(name="Author.getByName", query="select a from Author a where a.firstName = :firstName and a.lastName = : lastName")
 public class Author {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private long id;
-
-    @Column(name = "firstName", nullable = false)
     private String firstName;
-
-    @Column(name = "lastName", nullable = false)
     private String lastName;
 
     public Author() {};

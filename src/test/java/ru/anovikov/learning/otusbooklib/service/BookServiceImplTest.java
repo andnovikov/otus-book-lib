@@ -12,8 +12,8 @@ import ru.anovikov.learning.otusbooklib.domain.Book;
 import ru.anovikov.learning.otusbooklib.domain.Genre;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -44,7 +44,7 @@ class BookServiceImplTest {
     ConsoleService consoleService;
 
     @Mock
-    BookRepository bookRepository;
+    BookRepository bookDao;
 
     @Before
     public void init() {
@@ -63,7 +63,7 @@ class BookServiceImplTest {
 
         Book book = new Book(FIELD_BOOK_ID, author, genre, FIELD_BOOK_TITLE);
 
-        when(bookRepository.save(any())).thenReturn(book);
+        when(bookDao.insert(any())).thenReturn(book);
 
         assertEquals(bookService.insert(author, genre, FIELD_BOOK_TITLE), book);
     }
@@ -81,35 +81,9 @@ class BookServiceImplTest {
 
         Book book = new Book(FIELD_BOOK_ID, author, genre, FIELD_BOOK_TITLE);
 
-        when(bookRepository.save(any())).thenReturn(book);
+        when(bookDao.update(any())).thenReturn(book);
 
         assertEquals(bookService.update(FIELD_BOOK_ID, author, genre, FIELD_BOOK_TITLE), book);
-    }
-
-    @Test
-    void shouldCheckDuplicateInsertBook() {
-        Author author = new Author(FIELD_AUTHOR_ID, FIELD_AUTHOR_FIRSTNAME, FIELD_AUTHOR_LASTNAME);
-        Genre genre = new Genre(FIELD_GENRE_ID, FIELD_GENRE_NAME);
-        Book book = new Book(FIELD_BOOK_ID, author, genre, FIELD_BOOK_TITLE);
-
-        when(bookRepository.findByParam(anyLong(), anyLong(), anyString())).thenReturn(book);
-
-        assertThrows(DuplicateValueException.class, () -> {
-            bookService.insert(author, genre, FIELD_BOOK_TITLE);
-        });
-    }
-
-    @Test
-    void shouldCheckDuplicateUpdateBook() {
-        Author author = new Author(FIELD_AUTHOR_ID, FIELD_AUTHOR_FIRSTNAME, FIELD_AUTHOR_LASTNAME);
-        Genre genre = new Genre(FIELD_GENRE_ID, FIELD_GENRE_NAME);
-        Book book = new Book(FIELD_BOOK_ID, author, genre, FIELD_BOOK_TITLE);
-
-        when(bookRepository.findByParam(anyLong(), anyLong(), anyString())).thenReturn(book);
-
-        assertThrows(DuplicateValueException.class, () -> {
-            bookService.update(FIELD_BOOK_ID, author, genre, FIELD_BOOK_TITLE);
-        });
     }
 
 }

@@ -1,17 +1,18 @@
 package ru.anovikov.learning.otusbooklib.domain;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 
 @Entity
 @NamedQuery(name="Genre.findAll", query="select g from Genre g")
-@NamedQuery(name="Genre.findByName", query="select g from Genre g where g.genreName = :genreName")
+@NamedQuery(name="Genre.getByName", query="select g from Genre g where g.genreName = :genreName")
 public class Genre {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private long id;
-
-    @Column(name = "genreName", nullable = false, unique = true)
     private String genreName;
 
     public Genre() {};

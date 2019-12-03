@@ -4,72 +4,48 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.anovikov.learning.otusbooklib.repository.GenreRepository;
 import ru.anovikov.learning.otusbooklib.domain.Genre;
-import ru.anovikov.learning.otusbooklib.repository.NoDataFoundException;
 
 @Service
 public class GenreServiceImpl implements GenreService {
 
-    private GenreRepository genreRepository;
+    private GenreRepository genreDao;
     private ConsoleService consoleService;
 
     @Autowired
-    public GenreServiceImpl(GenreRepository genreRepository, ConsoleService consoleService) {
-        this.genreRepository = genreRepository;
+    public GenreServiceImpl(GenreRepository genreDao, ConsoleService consoleService) {
+        this.genreDao = genreDao;
         this.consoleService = consoleService;
     }
 
     @Override
     public Genre insert(String genreName) {
-        // check for duplicate values
-        try {
-            Genre foundGenre = genreRepository.findByName(genreName);
-            if (foundGenre != null) {
-                throw new DuplicateValueException();
-            }
-        }
-        catch (NoDataFoundException e) {
-            // do nothing
-        }
-        Genre genre = new Genre(genreName);
-        genre = genreRepository.save(genre);
+        Genre genre = new Genre(0, genreName);
+        genre = genreDao.insert(genre);
         return genre;
     }
 
     @Override
     public Genre update(long id, String genreName) {
-        //chek if exists
-        genreRepository.findById(id);
-        // check for duplicate values
-        try {
-            Genre foundGenre = genreRepository.findByName(genreName);
-            if ((foundGenre != null) && (foundGenre.getId() != id)) {
-                throw new DuplicateValueException();
-            }
-        }
-        catch (NoDataFoundException e) {
-            // do nothing
-        }
-
         Genre genre = new Genre(id, genreName);
-        genreRepository.save(genre);
-        genre = genreRepository.findById(id);
+        genreDao.update(genre);
+        genre = genreDao.getById(id);
         return genre;
     }
 
     @Override
     public void delete(long id) {
-        genreRepository.delete(id);
+        genreDao.delete(id);
     }
 
     @Override
     public Genre findById(long id){
-        Genre genre = genreRepository.findById(id);
+        Genre genre = genreDao.getById(id);
         return genre;
     }
 
     @Override
     public Genre findByName(String genreName){
-        Genre genre = genreRepository.findByName(genreName);
+        Genre genre = genreDao.getByName(genreName);
         return genre;
     }
 
