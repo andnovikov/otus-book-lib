@@ -15,7 +15,8 @@ public class Comment {
     @JoinColumn(name = "bookId")
     private Book book;
 
-    private String text;
+    @Column(name = "commentText")
+    private String commentText;
 
     public long getId() {
         return id;
@@ -25,12 +26,12 @@ public class Comment {
         this.id = id;
     }
 
-    public String getText() {
-        return text;
+    public String getCommentText() {
+        return commentText;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setCommentText(String commentText) {
+        this.commentText = commentText;
     }
 
     public Book getBook() {
