@@ -4,9 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.anovikov.learning.otusbooklib.domain.Author;
 import ru.anovikov.learning.otusbooklib.repository.AuthorRepository;
-import ru.anovikov.learning.otusbooklib.repository.NoDataFoundException;
-
-import java.util.Optional;
 
 @Service
 public class AuthorServiceImpl implements AuthorService {
@@ -39,18 +36,12 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public Author findByName(String firstName, String lastName) {
-        Author author = authorRepository.getByName(firstName, lastName);
+        Author author = authorRepository.findByName(firstName, lastName);
         return author;
     }
 
     public Author findById(long id) {
-        Optional<Author> foundEntity = authorRepository.findById(id);
-
-        if (!foundEntity.isPresent()) {
-            //TODO: throw new NoDataFoundException();
-        }
-
-        return foundEntity.get();
+        return authorRepository.findById(id);
     };
 
 }

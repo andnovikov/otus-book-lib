@@ -6,6 +6,7 @@ import ru.anovikov.learning.otusbooklib.repository.BookRepository;
 import ru.anovikov.learning.otusbooklib.domain.Author;
 import ru.anovikov.learning.otusbooklib.domain.Book;
 import ru.anovikov.learning.otusbooklib.domain.Genre;
+import ru.anovikov.learning.otusbooklib.repository.NoDataFoundException;
 
 import java.util.Optional;
 
@@ -46,23 +47,11 @@ public class BookServiceImpl implements BookService{
 
     @Override
     public Book findById(long id) {
-        Optional<Book> foundEntity = bookRepository.findById(id);
-
-        if (!foundEntity.isPresent()) {
-            //TODO: throw new NoDataFoundException();
-        }
-
-        return foundEntity.get();
+        return bookRepository.findById(id);
     };
 
     @Override
     public Book findByTitle(String title) {
-        Optional<Book> foundEntity = bookRepository.findByTitle(title);
-
-        if (!foundEntity.isPresent()) {
-            //TODO: throw new NoDataFoundException();
-        }
-
-        return foundEntity.get();
+        return bookRepository.findByTitle(title);
     };
 }

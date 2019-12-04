@@ -11,11 +11,11 @@ public interface BookRepository {
 
     void delete(long id);
 
-    Optional<Book> findById(long id);
+    Book findById(long id);
 
-    Optional<Book> findByTitle(String title);
+    Book findByTitle(String title);
 
-    Optional<Book> findByParam(long authorId, long genreId, String title);
+    Book findByParam(long authorId, long genreId, String title);
 
     List<Book> getAll();
 

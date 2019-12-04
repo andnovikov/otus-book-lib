@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @NamedQuery(name="Genre.findAll", query="select g from Genre g")
-@NamedQuery(name="Genre.getByName", query="select g from Genre g where g.genreName = :genreName")
+@NamedQuery(name="Genre.findByName", query="select g from Genre g where g.genreName = :genreName")
 public class Genre {
 
     @Id

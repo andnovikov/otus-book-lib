@@ -28,7 +28,7 @@ public class GenreServiceImpl implements GenreService {
     public Genre update(long id, String genreName) {
         Genre genre = new Genre(id, genreName);
         genreDao.save(genre);
-        genre = genreDao.getById(id);
+        genre = genreDao.findById(id);
         return genre;
     }
 
@@ -39,13 +39,13 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public Genre findById(long id){
-        Genre genre = genreDao.getById(id);
+        Genre genre = genreDao.findById(id);
         return genre;
     }
 
     @Override
     public Genre findByName(String genreName){
-        Genre genre = genreDao.getByName(genreName);
+        Genre genre = genreDao.findByName(genreName);
         return genre;
     }
 

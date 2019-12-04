@@ -86,4 +86,32 @@ class BookServiceImplTest {
         assertEquals(bookService.update(FIELD_BOOK_ID, author, genre, FIELD_BOOK_TITLE), book);
     }
 
+    /*
+    @Test
+    void shouldCheckDuplicateInsertBook() {
+        Book book = new Book(0,
+                new Author(FIELD_INSDUP_AUTHORID, "",""),
+                new Genre(FIELD_INSDUP_GENREID, ""), FIELD_INSDUP_TITLE);
+        bookRepositoryJpa.insert(book);
+        assertThrows(DuplicateValueException.class, () -> {
+            bookRepositoryJpa.insert(new Book(0,
+                    new Author(FIELD_INSDUP_AUTHORID, "",""),
+                    new Genre(FIELD_INSDUP_GENREID, ""), FIELD_INSDUP_TITLE));
+        });
+    }
+
+    @Test
+    void shouldCheckDuplicateUpdateBook() {
+        Book book = new Book(0,
+                new Author(FIELD_UPDDUP_AUTHORID, "",""),
+                new Genre(FIELD_UPDDUP_GENREID, ""), FIELD_UPDDUP_TITLE);
+        bookRepositoryJpa.insert(book);
+        assertThrows(DuplicateValueException.class, () -> {
+            bookRepositoryJpa.update(new Book(FIELD_UPD_ID,
+                    new Author(FIELD_UPDDUP_AUTHORID, "",""),
+                    new Genre(FIELD_UPDDUP_GENREID, ""), FIELD_UPDDUP_TITLE));
+        });
+    }
+    */
+
 }

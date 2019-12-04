@@ -5,7 +5,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "author")
 @NamedQuery(name="Author.findAll", query="select a from Author a")
-@NamedQuery(name="Author.getByName", query="select a from Author a where a.firstName = :firstName and a.lastName = : lastName")
+@NamedQuery(name="Author.findByName", query="select a from Author a where a.firstName = :firstName and a.lastName = : lastName")
 public class Author {
 
     @Id
