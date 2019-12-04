@@ -18,13 +18,6 @@ public class Comment {
     @Column(name = "commentText")
     private String commentText;
 
-    public Comment() {};
-
-    public Comment(Book book, String commentText) {
-        this.book = book;
-        this.commentText = commentText;
-    }
-
     public long getId() {
         return id;
     }
@@ -47,10 +40,5 @@ public class Comment {
 
     public void setBook(Book book) {
         this.book = book;
-    }
-
-    @Override
-    public String toString() {
-        return this.id + " " + this.commentText;
     }
 }
