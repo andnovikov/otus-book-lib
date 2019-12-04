@@ -1,12 +1,12 @@
-insert into author (id, firstName, lastName) values (1, 'Федор', 'Достоевский');
-insert into author (id, firstName, lastName) values (2, 'Лев', 'Толстой');
-insert into author (id, firstName, lastName) values (3, 'TestDelFirstname', 'TestDelLastname');
-insert into author (id, firstName, lastName) values (4, 'TestUpdFirstname', 'TestUpdLastname');
+insert into author (first_name, last_name) values ('Федор', 'Достоевский');
+insert into author (first_name, last_name) values ('Лев', 'Толстой');
+insert into author (first_name, last_name) values ('TestDelFirstname', 'TestDelLastname');
+insert into author (first_name, last_name) values ('TestUpdFirstname', 'TestUpdLastname');
 
-insert into genre(id, genreName) values (1, 'Роман');
-insert into genre(id, genreName) values (2, 'Повесть');
-insert into genre(id, genreName) values (3, 'TestDel');
-insert into genre(id, genreName) values (4, 'TestUpd');
+insert into genre(genre_name) values ('Роман');
+insert into genre(genre_name) values ('Повесть');
+insert into genre(genre_name) values ('TestDel');
+insert into genre(genre_name) values ('TestUpd');
 
-insert into book(id, authorId, genreId, title) values (1, 1, 1, 'Преступление и наказание');
-insert into book(id, authorId, genreId, title) values (2, 1, 1, 'TestDel');
+insert into book(author_id, genre_id, title) values (1, 1, 'Преступление и наказание');
+insert into book(author_id, genre_id, title) values (1, 1, 'TestDel');

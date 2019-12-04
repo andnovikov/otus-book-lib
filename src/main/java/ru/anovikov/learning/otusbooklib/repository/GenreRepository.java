@@ -3,12 +3,11 @@ package ru.anovikov.learning.otusbooklib.repository;
 import ru.anovikov.learning.otusbooklib.domain.Genre;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface GenreRepository {
 
-    Genre insert(Genre genre);
-
-    void update(Genre genre);
+    Genre save(Genre genre);
 
     void delete(long id);
 

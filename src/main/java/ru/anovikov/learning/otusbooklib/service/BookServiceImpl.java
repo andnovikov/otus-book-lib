@@ -7,6 +7,8 @@ import ru.anovikov.learning.otusbooklib.domain.Author;
 import ru.anovikov.learning.otusbooklib.domain.Book;
 import ru.anovikov.learning.otusbooklib.domain.Genre;
 
+import java.util.Optional;
+
 @Service
 public class BookServiceImpl implements BookService{
 
@@ -25,15 +27,15 @@ public class BookServiceImpl implements BookService{
 
     @Override
     public Book insert(Author author, Genre genre, String title) {
-        Book book = new Book(0, author, genre, title);
-        book = bookRepository.insert(book);
+        Book book = new Book(author, genre, title);
+        book = bookRepository.save(book);
         return book;
     }
 
     @Override
     public Book update(long id, Author author, Genre genre, String title) {
         Book book = new Book(id, author, genre, title);
-        book = bookRepository.update(book);
+        book = bookRepository.save(book);
         return book;
     }
 
@@ -44,19 +46,23 @@ public class BookServiceImpl implements BookService{
 
     @Override
     public Book findById(long id) {
-        Book book = bookRepository.getById(id);
-        return book;
+        Optional<Book> foundEntity = bookRepository.findById(id);
+
+        if (!foundEntity.isPresent()) {
+            //TODO: throw new NoDataFoundException();
+        }
+
+        return foundEntity.get();
     };
 
     @Override
     public Book findByTitle(String title) {
-        Book book = bookRepository.getByTitle(title);
-        return book;
-    };
+        Optional<Book> foundEntity = bookRepository.findByTitle(title);
 
-    @Override
-    public Book getById(long id) {
-        return bookRepository.getById(id);
-    };
+        if (!foundEntity.isPresent()) {
+            //TODO: throw new NoDataFoundException();
+        }
 
+        return foundEntity.get();
+    };
 }

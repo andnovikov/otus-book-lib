@@ -63,7 +63,7 @@ class BookServiceImplTest {
 
         Book book = new Book(FIELD_BOOK_ID, author, genre, FIELD_BOOK_TITLE);
 
-        when(bookDao.insert(any())).thenReturn(book);
+        when(bookDao.save(any())).thenReturn(book);
 
         assertEquals(bookService.insert(author, genre, FIELD_BOOK_TITLE), book);
     }
@@ -81,7 +81,7 @@ class BookServiceImplTest {
 
         Book book = new Book(FIELD_BOOK_ID, author, genre, FIELD_BOOK_TITLE);
 
-        when(bookDao.update(any())).thenReturn(book);
+        when(bookDao.save(any())).thenReturn(book);
 
         assertEquals(bookService.update(FIELD_BOOK_ID, author, genre, FIELD_BOOK_TITLE), book);
     }

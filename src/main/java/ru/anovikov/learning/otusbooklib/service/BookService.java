@@ -15,6 +15,4 @@ public interface BookService {
 
     Book findByTitle(String title);
 
-    Book getById(long id);
-
 }

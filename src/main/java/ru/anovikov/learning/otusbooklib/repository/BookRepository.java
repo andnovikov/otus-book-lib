@@ -3,20 +3,19 @@ package ru.anovikov.learning.otusbooklib.repository;
 import ru.anovikov.learning.otusbooklib.domain.Book;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BookRepository {
 
-    Book insert(Book book);
-
-    Book update(Book book);
+    Book save(Book book);
 
     void delete(long id);
 
-    Book getById(long id);
+    Optional<Book> findById(long id);
 
-    Book getByTitle(String title);
+    Optional<Book> findByTitle(String title);
 
-    Book getByParam(long authorId, long genreId, String title);
+    Optional<Book> findByParam(long authorId, long genreId, String title);
 
     List<Book> getAll();
 

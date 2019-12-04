@@ -20,53 +20,26 @@ public class AuthorRepositoryJpa implements AuthorRepository {
     private EntityManager em;
 
     @Override
-    public Author insert(Author author) {
-        // check if exists by name
-        try {
-            Author chkAuthor = getByName(author.getFirstName(), author.getLastName());
-            if (chkAuthor != null) {
-                throw new DuplicateValueException();
-            }
+    public Author save(Author author) {
+        if (author.getId() <= 0) {
+            em.persist(author);
+            em.flush();
+            return author;
+        } else {
+            return em.merge(author);
         }
-        catch (NoDataFoundException e) {
-            // nothing
-        }
-        em.persist(author);
-        return author;
-    }
-
-    @Override
-    public void update(Author author) {
-        // check if exists by id
-        getById(author.getId());
-        try {
-            // check if exists by name
-            Author chkAuthor = getByName(author.getFirstName(), author.getLastName());
-            if ((chkAuthor != null) && (author.getId() != chkAuthor.getId())) {
-                throw new DuplicateValueException();
-            }
-        }
-        catch (NoDataFoundException e) {
-            // nothing
-        }
-        em.merge(author);
     }
 
     @Override
     public void delete(long id) {
         // check if exists by id
-        Author author = getById(id);
+        Optional<Author> author = findById(id);
         em.remove(author);
     }
 
     @Override
-    public Author getById(long id) {
-        try {
-            return em.find(Author.class, id);
-        }
-        catch (EmptyResultDataAccessException | NoResultException e) {
-            throw new NoDataFoundException();
-        }
+    public Optional<Author> findById(long id) {
+        return Optional.ofNullable(em.find(Author.class, id));
     }
 
     @Override
