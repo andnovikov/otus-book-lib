@@ -1,9 +1,7 @@
 package ru.anovikov.learning.otusbooklib.repository;
 
-import com.sun.javafx.collections.MappingChange;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import ru.anovikov.learning.otusbooklib.domain.Genre;
 
@@ -11,12 +9,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 @SuppressWarnings("JpaQlInspection")
 @Repository
@@ -27,56 +21,29 @@ public class GenreRepositoryJpa implements GenreRepository {
     EntityManager em;
 
     @Override
-    public Genre insert(Genre genre){
-        // check if exists by name
-        try {
-            Genre chkGenre = getByName(genre.getGenreName());
-            if (chkGenre != null) {
-                throw new DuplicateValueException();
-            }
+    public Genre save(Genre genre){
+        if (genre.getId() <= 0) {
+            em.persist(genre);
+            em.flush();
+            return  genre;
+        } else {
+            return em.merge(genre);
         }
-        catch (NoDataFoundException e) {
-            // nothing
-        }
-
-        em.persist(genre);
-        // TODO return
-        // em.refresh(genre);
-        return genre;
-    }
-
-    @Override
-    public void update(Genre genre){
-        // check if exists by id
-        getById(genre.getId());
-        try {
-            // check if exists by name
-            Genre chkGenre = getByName(genre.getGenreName());
-            if ((chkGenre != null) && (genre.getId() != chkGenre.getId())) {
-                throw new DuplicateValueException();
-            }
-        }
-        catch (NoDataFoundException e) {
-            // nothing
-        }
-        em.merge(genre);
     }
 
     @Override
     public void delete(long id) {
-        // check if exists by id
         Genre genre = getById(id);
         em.remove(genre);
     }
 
     @Override
     public Genre getById(long id){
-        try {
-            return em.find(Genre.class, id);
-        }
-        catch (EmptyResultDataAccessException e) {
+        Optional<Genre> foundEntity = Optional.ofNullable(em.find(Genre.class, id));
+        if (!foundEntity.isPresent()) {
             throw new NoDataFoundException();
         }
+        return foundEntity.get();
     }
 
     @Override

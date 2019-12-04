@@ -9,6 +9,8 @@ public class OtusBookLibApplication {
 
 	public static void main(String[] args) throws Exception{
 		ApplicationContext context = SpringApplication.run(OtusBookLibApplication.class, args);
+
+
 	}
 
 }

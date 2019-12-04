@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class Book {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -18,6 +18,7 @@ public class Book {
     @JoinColumn(name = "genreId")
     private Genre genre;
 
+    @Column(name = "title", nullable = false)
     private String title;
 
     public Book() {};
