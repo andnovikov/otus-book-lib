@@ -13,7 +13,7 @@ import ru.anovikov.learning.otusbooklib.domain.Genre;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@DisplayName("Repository JPA for authors")
+@DisplayName("Repository JPA for genre")
 @DataJpaTest
 @Import({GenreRepositoryJpa.class})
 class GenreRepositoryJpaTest {
@@ -48,7 +48,7 @@ class GenreRepositoryJpaTest {
     void shouldSaveAndLoadCorrectGenre() {
         Genre genre = new Genre(FIELD_INS_GENRENAME);
         genreRepositoryJpa.save(genre);
-        assertThat(genreRepositoryJpa.getById(genre.getId()))
+        assertThat(genreRepositoryJpa.findById(genre.getId()))
                 .hasFieldOrPropertyWithValue("genreName", FIELD_INS_GENRENAME);
     }
 
@@ -56,7 +56,7 @@ class GenreRepositoryJpaTest {
     void shouldUpdateGenre() {
         Genre genre = new Genre(FIELD_UPD_ID, FIELD_UPD_GENRENAME);
         genreRepositoryJpa.save(genre);
-        assertThat(genreRepositoryJpa.getById(FIELD_UPD_ID))
+        assertThat(genreRepositoryJpa.findById(FIELD_UPD_ID))
                 .hasFieldOrPropertyWithValue("genreName", FIELD_UPD_GENRENAME);
     }
 
@@ -64,24 +64,6 @@ class GenreRepositoryJpaTest {
     void shouldDeleteGenre() {
         genreRepositoryJpa.delete(FIELD_DEL_ID);
         assertThrows(NoDataFoundException.class, () -> {
-            genreRepositoryJpa.getById(FIELD_DEL_ID);});
-    }
-
-    @Test
-    void shouldCheckDuplicateInsertGenre() {
-        Genre genre = new Genre(FIELD_INSDUP_GENRENAME);
-        genre = genreRepositoryJpa.save(genre);
-        assertThrows(DuplicateValueException.class, () -> {
-            genreRepositoryJpa.save(new Genre(FIELD_INSDUP_GENRENAME));
-        });
-    }
-
-    @Test
-    void shouldCheckDuplicateUpdateGenre() {
-        Genre genre = new Genre(FIELD_UPDDUP_GENRENAME);
-        genre = genreRepositoryJpa.save(genre);
-        assertThrows(DuplicateValueException.class, () -> {
-            genreRepositoryJpa.save(new Genre(FIELD_UPD_ID, FIELD_UPDDUP_GENRENAME));
-        });
+            genreRepositoryJpa.findById(FIELD_DEL_ID);});
     }
 }

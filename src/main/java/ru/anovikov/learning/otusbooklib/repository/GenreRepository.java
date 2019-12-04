@@ -3,7 +3,6 @@ package ru.anovikov.learning.otusbooklib.repository;
 import ru.anovikov.learning.otusbooklib.domain.Genre;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface GenreRepository {
 
@@ -11,9 +10,9 @@ public interface GenreRepository {
 
     void delete(long id);
 
-    Genre getById(long id);
+    Genre findById(long id);
 
-    Genre getByName(String genreName);
+    Genre findByName(String genreName);
 
     List<Genre> getAll();
 

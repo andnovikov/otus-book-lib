@@ -33,19 +33,23 @@ public class AuthorRepositoryJpa implements AuthorRepository {
     @Override
     public void delete(long id) {
         // check if exists by id
-        Optional<Author> author = findById(id);
+        Author author = findById(id);
         em.remove(author);
     }
 
     @Override
-    public Optional<Author> findById(long id) {
-        return Optional.ofNullable(em.find(Author.class, id));
+    public Author findById(long id) {
+        Optional<Author> foundEntity = Optional.ofNullable(em.find(Author.class, id));
+        if (!foundEntity.isPresent()) {
+            throw new NoDataFoundException();
+        }
+        return foundEntity.get();
     }
 
     @Override
-    public Author getByName(String firstName, String lastName) {
+    public Author findByName(String firstName, String lastName) {
         try {
-            TypedQuery<Author> query = em.createNamedQuery("Author.getByName", Author.class);
+            TypedQuery<Author> query = em.createNamedQuery("Author.findByName", Author.class);
             query.setParameter("firstName", firstName);
             query.setParameter("lastName", lastName);
             return query.getSingleResult();
@@ -57,9 +61,7 @@ public class AuthorRepositoryJpa implements AuthorRepository {
 
     @Override
     public List<Author> getAll() {
-        TypedQuery<Author> query = em.createQuery(
-                "select a from author a",
-                Author.class);
+        TypedQuery<Author> query = em.createNamedQuery("Author.findAll", Author.class);
         return query.getResultList();
     }
 }

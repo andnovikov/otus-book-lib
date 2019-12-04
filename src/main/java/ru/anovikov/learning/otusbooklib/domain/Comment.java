@@ -3,7 +3,8 @@ package ru.anovikov.learning.otusbooklib.domain;
 import javax.persistence.*;
 
 @Entity
-@NamedQuery(name="Book.findAll", query="select c from comment c")
+@NamedQuery(name="Comment.findAll", query="select c from Comment c")
+@NamedQuery(name="Comment.findByBook", query="select c from Comment c where c.book.id = :bookId")
 public class Comment {
 
     @Id

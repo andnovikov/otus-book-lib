@@ -33,12 +33,12 @@ public class GenreRepositoryJpa implements GenreRepository {
 
     @Override
     public void delete(long id) {
-        Genre genre = getById(id);
+        Genre genre = findById(id);
         em.remove(genre);
     }
 
     @Override
-    public Genre getById(long id){
+    public Genre findById(long id){
         Optional<Genre> foundEntity = Optional.ofNullable(em.find(Genre.class, id));
         if (!foundEntity.isPresent()) {
             throw new NoDataFoundException();
@@ -47,9 +47,9 @@ public class GenreRepositoryJpa implements GenreRepository {
     }
 
     @Override
-    public Genre getByName(String genreName) {
+    public Genre findByName(String genreName) {
         try {
-            TypedQuery<Genre> query = em.createNamedQuery("Genre.getByName", Genre.class);
+            TypedQuery<Genre> query = em.createNamedQuery("Genre.findByName", Genre.class);
             query.setParameter("genreName", genreName);
             return query.getSingleResult();
         }
