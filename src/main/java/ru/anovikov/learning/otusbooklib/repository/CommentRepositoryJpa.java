@@ -1,5 +1,8 @@
 package ru.anovikov.learning.otusbooklib.repository;
 
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+import ru.anovikov.learning.otusbooklib.domain.Book;
 import ru.anovikov.learning.otusbooklib.domain.Comment;
 
 import javax.persistence.EntityManager;
@@ -8,6 +11,9 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
+@SuppressWarnings("JpaQlInspections")
+@Repository
+@Transactional
 public class CommentRepositoryJpa implements CommentRepository {
 
     @PersistenceContext
@@ -41,9 +47,9 @@ public class CommentRepositoryJpa implements CommentRepository {
     }
 
     @Override
-    public List<Comment> findByBook(long bookId) {
+    public List<Comment> findByBook(Book book) {
         TypedQuery<Comment> query = em.createNamedQuery("Comment.findByBook", Comment.class);
-        query.setParameter("bookId", bookId);
+        query.setParameter("bookId", book.getId());
         return query.getResultList();
     }
 

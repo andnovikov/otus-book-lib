@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.anovikov.learning.otusbooklib.domain.Author;
 import ru.anovikov.learning.otusbooklib.repository.AuthorRepository;
+import ru.anovikov.learning.otusbooklib.repository.NoDataFoundException;
+
+import java.util.Optional;
 
 @Service
 public class AuthorServiceImpl implements AuthorService {
@@ -17,13 +20,37 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public Author insert(String firstName, String lastName) {
-        Author author = new Author(0, firstName, lastName);
+        // check for duplicate values
+        try {
+            Author foundAuthor = authorRepository.findByName(firstName, lastName);
+            if (foundAuthor != null) {
+                throw new DuplicateValueException();
+            }
+        }
+        catch (NoDataFoundException e) {
+            // do nothing
+        }
+
+        Author author = new Author(firstName, lastName);
         author = authorRepository.save(author);
         return author;
     }
 
     @Override
     public Author update(long id, String firstName, String lastName) {
+        //chek if exists
+        authorRepository.findById(id);
+        // check for duplicate values
+        try {
+            Author foundAuthor = authorRepository.findByName(firstName, lastName);
+            if ((foundAuthor != null) && (foundAuthor.getId() != id)) {
+                throw new DuplicateValueException();
+            }
+        }
+        catch (NoDataFoundException e) {
+            // do nothing
+        }
+
         Author author = new Author(id, firstName, lastName);
         author = authorRepository.save(author);
         return author;
@@ -36,8 +63,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public Author findByName(String firstName, String lastName) {
-        Author author = authorRepository.findByName(firstName, lastName);
-        return author;
+        return authorRepository.findByName(firstName, lastName);
     }
 
     public Author findById(long id) {
