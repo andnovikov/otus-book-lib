@@ -12,8 +12,8 @@ import ru.anovikov.learning.otusbooklib.domain.Book;
 import ru.anovikov.learning.otusbooklib.domain.Genre;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -44,7 +44,7 @@ class BookServiceImplTest {
     ConsoleService consoleService;
 
     @Mock
-    BookRepository bookDao;
+    BookRepository bookRepository;
 
     @Before
     public void init() {
@@ -63,7 +63,7 @@ class BookServiceImplTest {
 
         Book book = new Book(FIELD_BOOK_ID, author, genre, FIELD_BOOK_TITLE);
 
-        when(bookDao.save(any())).thenReturn(book);
+        when(bookRepository.save(any())).thenReturn(book);
 
         assertEquals(bookService.insert(author, genre, FIELD_BOOK_TITLE), book);
     }
@@ -81,37 +81,35 @@ class BookServiceImplTest {
 
         Book book = new Book(FIELD_BOOK_ID, author, genre, FIELD_BOOK_TITLE);
 
-        when(bookDao.save(any())).thenReturn(book);
+        when(bookRepository.save(any())).thenReturn(book);
 
         assertEquals(bookService.update(FIELD_BOOK_ID, author, genre, FIELD_BOOK_TITLE), book);
     }
 
-    /*
     @Test
     void shouldCheckDuplicateInsertBook() {
-        Book book = new Book(0,
-                new Author(FIELD_INSDUP_AUTHORID, "",""),
-                new Genre(FIELD_INSDUP_GENREID, ""), FIELD_INSDUP_TITLE);
-        bookRepositoryJpa.insert(book);
+        Author author = new Author(FIELD_AUTHOR_ID, FIELD_AUTHOR_FIRSTNAME, FIELD_AUTHOR_LASTNAME);
+        Genre genre = new Genre(FIELD_GENRE_ID, FIELD_GENRE_NAME);
+        Book book = new Book(FIELD_BOOK_ID, author, genre, FIELD_BOOK_TITLE);
+
+        when(bookRepository.findByParam(anyLong(), anyLong(), anyString())).thenReturn(book);
+
         assertThrows(DuplicateValueException.class, () -> {
-            bookRepositoryJpa.insert(new Book(0,
-                    new Author(FIELD_INSDUP_AUTHORID, "",""),
-                    new Genre(FIELD_INSDUP_GENREID, ""), FIELD_INSDUP_TITLE));
+            bookService.insert(author, genre, FIELD_BOOK_TITLE);
         });
     }
 
     @Test
     void shouldCheckDuplicateUpdateBook() {
-        Book book = new Book(0,
-                new Author(FIELD_UPDDUP_AUTHORID, "",""),
-                new Genre(FIELD_UPDDUP_GENREID, ""), FIELD_UPDDUP_TITLE);
-        bookRepositoryJpa.insert(book);
+        Author author = new Author(FIELD_AUTHOR_ID, FIELD_AUTHOR_FIRSTNAME, FIELD_AUTHOR_LASTNAME);
+        Genre genre = new Genre(FIELD_GENRE_ID, FIELD_GENRE_NAME);
+        Book book = new Book(FIELD_BOOK_ID, author, genre, FIELD_BOOK_TITLE);
+
+        when(bookRepository.findByParam(anyLong(), anyLong(), anyString())).thenReturn(book);
+
         assertThrows(DuplicateValueException.class, () -> {
-            bookRepositoryJpa.update(new Book(FIELD_UPD_ID,
-                    new Author(FIELD_UPDDUP_AUTHORID, "",""),
-                    new Genre(FIELD_UPDDUP_GENREID, ""), FIELD_UPDDUP_TITLE));
+            bookService.update(FIELD_BOOK_ID, author, genre, FIELD_BOOK_TITLE);
         });
     }
-    */
 
 }

@@ -25,9 +25,6 @@ class GenreRepositoryJpaTest {
 
     private static final long FIELD_DEL_ID = 3;
 
-    public static final String FIELD_INSDUP_GENRENAME = "genre3";
-    public static final String FIELD_UPDDUP_GENRENAME = "genre5";
-
     @Autowired
     private GenreRepositoryJpa genreRepositoryJpa;
 

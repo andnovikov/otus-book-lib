@@ -27,12 +27,6 @@ class AuthorRepositoryJpaTest {
 
     private static final long FIELD_DEL_ID = 3;
 
-    private static final String FIELD_INSDUP_FIRSTNAME = "firstname2";
-    private static final String FIELD_INSDUP_LASTNAME = "lastname2";
-
-    private static final String FIELD_UPDDUP_FIRSTNAME = "firstname3";
-    private static final String FIELD_UPDDUP_LASTNAME = "lastname3";
-
     @Autowired
     private AuthorRepositoryJpa authorRepositoryJpa;
 
