@@ -2,7 +2,6 @@ package ru.anovikov.learning.otusbooklib.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.anovikov.learning.otusbooklib.domain.Author;
 import ru.anovikov.learning.otusbooklib.repository.GenreRepository;
 import ru.anovikov.learning.otusbooklib.domain.Genre;
 import ru.anovikov.learning.otusbooklib.repository.NoDataFoundException;

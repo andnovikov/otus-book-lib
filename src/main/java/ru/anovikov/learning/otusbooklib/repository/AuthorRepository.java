@@ -3,7 +3,6 @@ package ru.anovikov.learning.otusbooklib.repository;
 import ru.anovikov.learning.otusbooklib.domain.Author;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface AuthorRepository {
 

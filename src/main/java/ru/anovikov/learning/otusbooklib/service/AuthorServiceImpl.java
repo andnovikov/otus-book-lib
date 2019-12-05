@@ -6,8 +6,6 @@ import ru.anovikov.learning.otusbooklib.domain.Author;
 import ru.anovikov.learning.otusbooklib.repository.AuthorRepository;
 import ru.anovikov.learning.otusbooklib.repository.NoDataFoundException;
 
-import java.util.Optional;
-
 @Service
 public class AuthorServiceImpl implements AuthorService {
 
