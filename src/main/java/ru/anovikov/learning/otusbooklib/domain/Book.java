@@ -4,7 +4,8 @@ import javax.persistence.*;
 
 @Entity
 @NamedQuery(name="Book.findAll", query="select b from Book b")
-@NamedQuery(name="Book.findByTitle", query="select b from Book b where b.title = :title")
+// TODO Get full book
+@NamedQuery(name="Book.findByTitle", query="select b from Book b join Author join Genre where b.title = :title")
 @NamedQuery(name="Book.findByParam", query="select b from Book b where b.author.id = :authorId and b.genre.id = :genreId and b.title = :title")
 public class Book {
 

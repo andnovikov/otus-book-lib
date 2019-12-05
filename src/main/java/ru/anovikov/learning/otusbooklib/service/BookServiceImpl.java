@@ -28,6 +28,17 @@ public class BookServiceImpl implements BookService{
 
     @Override
     public Book insert(Author author, Genre genre, String title) {
+        // check for duplicate values
+        try {
+            Book foundBook = bookRepository.findByParam(author.getId(), genre.getId(), title);
+            if (foundBook != null) {
+                throw new DuplicateValueException();
+            }
+        }
+        catch (NoDataFoundException e) {
+            // do nothing
+        }
+
         Book book = new Book(author, genre, title);
         book = bookRepository.save(book);
         return book;
@@ -35,6 +46,19 @@ public class BookServiceImpl implements BookService{
 
     @Override
     public Book update(long id, Author author, Genre genre, String title) {
+        //chek if exists
+        bookRepository.findById(id);
+        // check for duplicate values
+        try {
+            Book foundBook = bookRepository.findByParam(author.getId(), genre.getId(), title);
+            if (foundBook != null) {
+                throw new DuplicateValueException();
+            }
+        }
+        catch (NoDataFoundException e) {
+            // do nothing
+        }
+
         Book book = new Book(id, author, genre, title);
         book = bookRepository.save(book);
         return book;
