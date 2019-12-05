@@ -51,6 +51,6 @@ public class Comment {
 
     @Override
     public String toString() {
-        return this.id + " " + this.book.getTitle() + " " + this.commentText;
+        return this.id + " " + this.commentText;
     }
 }

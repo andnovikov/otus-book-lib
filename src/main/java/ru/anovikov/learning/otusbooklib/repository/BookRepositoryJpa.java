@@ -41,11 +41,14 @@ public class BookRepositoryJpa implements BookRepository {
 
     @Override
     public Book findById(long id) {
-        Optional<Book> foundEntity = Optional.ofNullable(em.find(Book.class, id));
-        if (!foundEntity.isPresent()) {
+        try {
+            TypedQuery<Book> query = em.createNamedQuery("Book.findById", Book.class);
+            query.setParameter("bookId", id);
+            return query.getSingleResult();
+        }
+        catch (EmptyResultDataAccessException | NoResultException e) {
             throw new NoDataFoundException();
         }
-        return foundEntity.get();
     };
 
     @Override
