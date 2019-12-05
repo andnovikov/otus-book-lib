@@ -31,14 +31,6 @@ class BookRepositoryJpaTest {
 
     private static final long FIELD_DEL_ID = 2;
 
-    private static final long FIELD_INSDUP_AUTHORID = 1;
-    private static final long FIELD_INSDUP_GENREID = 1;
-    private static final String FIELD_INSDUP_TITLE = "book3";
-
-    private static final long FIELD_UPDDUP_AUTHORID = 1;
-    private static final long FIELD_UPDDUP_GENREID = 1;
-    private static final String FIELD_UPDDUP_TITLE = "book4";
-
     @Autowired
     private BookRepositoryJpa bookRepositoryJpa;
 

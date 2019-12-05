@@ -10,3 +10,6 @@ insert into genre(genre_name) values ('TestUpd');
 
 insert into book(author_id, genre_id, title) values (1, 1, 'Преступление и наказание');
 insert into book(author_id, genre_id, title) values (1, 1, 'TestDel');
+
+insert into comment(book_id, comment_text) values (1, 'огонь!');
+insert into comment(book_id, comment_text) values (1, 'пишите ещё!')
