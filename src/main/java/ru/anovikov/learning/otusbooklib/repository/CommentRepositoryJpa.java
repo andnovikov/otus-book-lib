@@ -26,7 +26,9 @@ public class CommentRepositoryJpa implements CommentRepository {
             em.flush();
             return comment;
         } else {
-            return em.merge(comment);
+            em.merge(comment);
+            em.flush();
+            return comment;
         }
     }
 
@@ -35,6 +37,7 @@ public class CommentRepositoryJpa implements CommentRepository {
         // check if exists by id
         Comment comment = findById(id);
         em.remove(comment);
+        em.flush();
     }
 
     @Override

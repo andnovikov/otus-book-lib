@@ -26,7 +26,9 @@ public class AuthorRepositoryJpa implements AuthorRepository {
             em.flush();
             return author;
         } else {
-            return em.merge(author);
+            em.merge(author);
+            em.flush();
+            return author;
         }
     }
 
@@ -35,6 +37,7 @@ public class AuthorRepositoryJpa implements AuthorRepository {
         // check if exists by id
         Author author = findById(id);
         em.remove(author);
+        em.flush();
     }
 
     @Override

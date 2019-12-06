@@ -27,7 +27,9 @@ public class GenreRepositoryJpa implements GenreRepository {
             em.flush();
             return  genre;
         } else {
-            return em.merge(genre);
+            em.merge(genre);
+            em.flush();
+            return genre;
         }
     }
 
