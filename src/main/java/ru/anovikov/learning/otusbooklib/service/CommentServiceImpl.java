@@ -7,6 +7,7 @@ import ru.anovikov.learning.otusbooklib.domain.Comment;
 import ru.anovikov.learning.otusbooklib.repository.CommentRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -28,12 +29,20 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void delete(long id) {
-        commentRepository.delete(id);
+        Optional<Comment> foundComment = commentRepository.findById(id);
+        if (!foundComment.isPresent()) {
+            throw new NoDataFoundException();
+        }
+        commentRepository.delete(foundComment.get());
     }
 
     @Override
     public Comment findById(long id) {
-        return commentRepository.findById(id);
+        Optional<Comment> foundComment = commentRepository.findById(id);
+        if (!foundComment.isPresent()) {
+            throw new NoDataFoundException();
+        }
+        return foundComment.get();
     }
 
     @Override

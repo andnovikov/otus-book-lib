@@ -32,6 +32,7 @@ class AuthorServiceImplTest {
         MockitoAnnotations.initMocks(this);
     }
 
+/*
     @Test
     void shouldCheckDuplicateInsertAuthor() {
         Author author = new Author(FIELD_INS_FIRSTNAME, FIELD_INS_LASTNAME);
@@ -51,5 +52,5 @@ class AuthorServiceImplTest {
             authorService.update(FIELD_INS_ID, FIELD_INS_FIRSTNAME, FIELD_INS_LASTNAME);
         });
     }
-
+*/
 }

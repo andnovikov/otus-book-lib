@@ -1,19 +1,25 @@
 package ru.anovikov.learning.otusbooklib.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import ru.anovikov.learning.otusbooklib.domain.Genre;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface GenreRepository {
+@Repository
+public interface GenreRepository extends JpaRepository<Genre, Long> {
 
     Genre save(Genre genre);
 
-    void delete(long id);
+    void delete(Genre genre);
 
-    Genre findById(long id);
+    Optional<Genre> findById(long id);
 
-    Genre findByName(String genreName);
+    Optional<Genre> findByGenreName(String genreName);
 
-    List<Genre> getAll();
+    List<Genre> findAll();
+
+    boolean existsById(long id);
 
 }
