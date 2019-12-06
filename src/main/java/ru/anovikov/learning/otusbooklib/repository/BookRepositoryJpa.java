@@ -27,7 +27,9 @@ public class BookRepositoryJpa implements BookRepository {
             em.flush();
             return book;
         } else {
-            return em.merge(book);
+            em.merge(book);
+            em.flush();
+            return book;
         }
     }
 
@@ -36,6 +38,7 @@ public class BookRepositoryJpa implements BookRepository {
         // check if exists by id
         Book book = findById(id);
         em.remove(book);
+        em.flush();
     };
 
     @Override
