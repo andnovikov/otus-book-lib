@@ -11,6 +11,8 @@ import ru.anovikov.learning.otusbooklib.domain.Author;
 import ru.anovikov.learning.otusbooklib.domain.Book;
 import ru.anovikov.learning.otusbooklib.domain.Genre;
 
+import java.util.Optional;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
@@ -27,9 +29,8 @@ class BookServiceImplTest {
 
     public static final String FIELD_READ_TITLE = "read.book.title";
     public static final String FIELD_READ_ID = "read.book.id";
-    public static final long FIELD_BOOK_ID = 0;
+    public static final long FIELD_BOOK_ID = 1;
     public static final String FIELD_BOOK_TITLE = "testBookTitle";
-
 
     @InjectMocks
     BookServiceImpl bookService;
@@ -51,7 +52,6 @@ class BookServiceImplTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    /*
     @Test
     void shouldReturnCorrectBook() {
         Author author = new Author(FIELD_AUTHOR_ID, FIELD_AUTHOR_FIRSTNAME, FIELD_AUTHOR_LASTNAME);
@@ -62,7 +62,7 @@ class BookServiceImplTest {
 
         when(consoleService.readString(FIELD_READ_TITLE)).thenReturn(FIELD_BOOK_TITLE);
 
-        Book book = new Book(FIELD_BOOK_ID, author, genre, FIELD_BOOK_TITLE);
+        Book book = new Book(author, genre, FIELD_BOOK_TITLE);
 
         when(bookRepository.save(any())).thenReturn(book);
 
@@ -72,16 +72,14 @@ class BookServiceImplTest {
     @Test
     void shouldReturnUpdatedBook() {
         Author author = new Author(FIELD_AUTHOR_ID, FIELD_AUTHOR_FIRSTNAME, FIELD_AUTHOR_LASTNAME);
-        when(authorService.findByName(anyString(), anyString())).thenReturn(author);
-
         Genre genre = new Genre(FIELD_GENRE_ID, FIELD_GENRE_NAME);
-        when(genreService.findByName(anyString())).thenReturn(genre);
+        Book book = new Book(author, genre, FIELD_BOOK_TITLE);
 
+        when(authorService.findByName(anyString(), anyString())).thenReturn(author);
+        when(genreService.findByName(anyString())).thenReturn(genre);
         when(consoleService.readLong(FIELD_READ_ID)).thenReturn(FIELD_BOOK_ID);
         when(consoleService.readString(FIELD_READ_TITLE)).thenReturn(FIELD_BOOK_TITLE);
-
-        Book book = new Book(FIELD_BOOK_ID, author, genre, FIELD_BOOK_TITLE);
-
+        when(bookRepository.existsById(anyLong())).thenReturn(true);
         when(bookRepository.save(any())).thenReturn(book);
 
         assertEquals(bookService.update(FIELD_BOOK_ID, author, genre, FIELD_BOOK_TITLE), book);
@@ -91,9 +89,10 @@ class BookServiceImplTest {
     void shouldCheckDuplicateInsertBook() {
         Author author = new Author(FIELD_AUTHOR_ID, FIELD_AUTHOR_FIRSTNAME, FIELD_AUTHOR_LASTNAME);
         Genre genre = new Genre(FIELD_GENRE_ID, FIELD_GENRE_NAME);
-        Book book = new Book(FIELD_BOOK_ID, author, genre, FIELD_BOOK_TITLE);
+        Book book = new Book(author, genre, FIELD_BOOK_TITLE);
 
-        when(bookRepository.findByAuthorAndGenreAndTitle(any(), any(), anyString())).thenReturn(book);
+        when(bookRepository.findByAuthorAndGenreAndTitle(any(), any(), anyString())).thenReturn(Optional.of(book));
+        when(bookRepository.save(any())).thenReturn(book);
 
         assertThrows(DuplicateValueException.class, () -> {
             bookService.insert(author, genre, FIELD_BOOK_TITLE);
@@ -104,14 +103,14 @@ class BookServiceImplTest {
     void shouldCheckDuplicateUpdateBook() {
         Author author = new Author(FIELD_AUTHOR_ID, FIELD_AUTHOR_FIRSTNAME, FIELD_AUTHOR_LASTNAME);
         Genre genre = new Genre(FIELD_GENRE_ID, FIELD_GENRE_NAME);
-        Book book = new Book(FIELD_BOOK_ID, author, genre, FIELD_BOOK_TITLE);
+        Book book = new Book(author, genre, FIELD_BOOK_TITLE);
 
-        when(bookRepository.findByAuthorAndGenreAndTitle(any(), any(), anyString())).thenReturn(book);
+        when(bookRepository.findByAuthorAndGenreAndTitle(any(), any(), anyString())).thenReturn(Optional.of(book));
+        when(bookRepository.existsById(anyLong())).thenReturn(true);
+        when(bookRepository.save(any())).thenReturn(book);
 
         assertThrows(DuplicateValueException.class, () -> {
             bookService.update(FIELD_BOOK_ID, author, genre, FIELD_BOOK_TITLE);
         });
     }
-    */
-
 }

@@ -4,18 +4,18 @@ import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
+import org.springframework.test.context.junit4.SpringRunner;
 import ru.anovikov.learning.otusbooklib.domain.Author;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("Repository for authors")
+@RunWith(SpringRunner.class)
 @DataJpaTest
-@Import({AuthorRepository.class})
 class AuthorRepositoryTest {
 
     private static final String FIELD_INS_FIRSTNAME = "firstname";
@@ -43,12 +43,11 @@ class AuthorRepositoryTest {
         sessionFactory.getStatistics().clear();
     }
 
-    /*
     @Test
     void shouldSaveAndLoadCorrectAuthor() {
         Author author = new Author(FIELD_INS_FIRSTNAME, FIELD_INS_LASTNAME);
         author = authorRepository.save(author);
-        assertThat(authorRepository.findById(author.getId()))
+        assertThat(authorRepository.findById(author.getId())).get()
                 .hasFieldOrPropertyWithValue("firstName", FIELD_INS_FIRSTNAME);
     }
 
@@ -56,15 +55,14 @@ class AuthorRepositoryTest {
     void shouldUpateAuthor() {
         Author author = new Author(FIELD_UPD_ID, FIELD_UPD_FIRSTNAME, FIELD_UPD_LASTNAME);
         authorRepository.save(author);
-        assertThat(authorRepository.findById(FIELD_UPD_ID))
+        assertThat(authorRepository.findById(FIELD_UPD_ID)).get()
                 .hasFieldOrPropertyWithValue("firstName", FIELD_UPD_FIRSTNAME);
     }
 
     @Test
     void shouldDeleteAuthor() {
-        authorRepository.delete(FIELD_DEL_ID);
-        assertThrows(NoDataFoundException.class, () -> {
-            authorRepository.findById(FIELD_DEL_ID);});
+        Author author = authorRepository.findById(FIELD_DEL_ID).get();
+        authorRepository.delete(author);
+        assertThat(authorRepository.findById(FIELD_DEL_ID)).isNotPresent();
     }
-    */
 }

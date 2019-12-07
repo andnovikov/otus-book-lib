@@ -11,6 +11,7 @@ import ru.anovikov.learning.otusbooklib.repository.GenreRepository;
 
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -32,25 +33,25 @@ class GenreServiceImplTest {
     public void init() {
         MockitoAnnotations.initMocks(this);
     }
-/*
+
     @Test
     void shouldCheckDuplicateInsertGenre() {
         Genre genre = new Genre(FIELD_GENRENAME);
-        when(genreRepository.findByGenreName(anyString())).thenReturn();
+        when(genreRepository.findByGenreName(anyString())).thenReturn(Optional.of(genre));
 
         assertThrows(DuplicateValueException.class, () -> {
             genreService.insert(FIELD_GENRENAME);
         });
     }
-/*
+
     @Test
-    void shouldCheckDuplicateInsertGenre() {
+    void shouldCheckDuplicateUpdateGenre() {
         Genre genre = new Genre(FIELD_GENRENAME);
-        when(genreRepository.findByGenreName(anyString())).thenReturn(genre);
+        when(genreRepository.findByGenreName(anyString())).thenReturn(Optional.of(genre));
+        when(genreRepository.existsById(anyLong())).thenReturn(true);
 
         assertThrows(DuplicateValueException.class, () -> {
             genreService.update(FIELD_ID, FIELD_GENRENAME);
         });
     }
-    */
 }

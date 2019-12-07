@@ -9,6 +9,9 @@ import org.junit.jupiter.api.Test;
 import ru.anovikov.learning.otusbooklib.domain.Author;
 import ru.anovikov.learning.otusbooklib.repository.AuthorRepository;
 
+import java.util.Optional;
+
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -32,11 +35,10 @@ class AuthorServiceImplTest {
         MockitoAnnotations.initMocks(this);
     }
 
-/*
     @Test
     void shouldCheckDuplicateInsertAuthor() {
         Author author = new Author(FIELD_INS_FIRSTNAME, FIELD_INS_LASTNAME);
-        when(authorRepository.findByName(anyString(), anyString())).thenReturn(author);
+        when(authorRepository.findByName(anyString(), anyString())).thenReturn(Optional.of(author));
 
         assertThrows(DuplicateValueException.class, () -> {
             authorService.insert(FIELD_INS_FIRSTNAME, FIELD_INS_LASTNAME);
@@ -46,11 +48,11 @@ class AuthorServiceImplTest {
     @Test
     void shouldCheckDuplicateUpdateAuthor() {
         Author author = new Author(FIELD_INS_FIRSTNAME, FIELD_INS_LASTNAME);
-        when(authorRepository.findByName(anyString(), anyString())).thenReturn(author);
+        when(authorRepository.findByName(anyString(), anyString())).thenReturn(Optional.of(author));
+        when(authorRepository.existsById(anyLong())).thenReturn(true);
 
         assertThrows(DuplicateValueException.class, () -> {
             authorService.update(FIELD_INS_ID, FIELD_INS_FIRSTNAME, FIELD_INS_LASTNAME);
         });
     }
-*/
 }
