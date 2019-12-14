@@ -1,13 +1,11 @@
 package ru.anovikov.learning.otusbooklib.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import ru.anovikov.learning.otusbooklib.shell.DataInputException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Locale;
 
 @Service
 public class ConsoleServiceImpl implements ConsoleService {
