@@ -5,10 +5,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.anovikov.learning.otusbooklib.domain.Author;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.util.*;
 
 @SuppressWarnings("JpaQlInspection")
@@ -21,13 +18,12 @@ public class AuthorRepositoryJpa implements AuthorRepository {
 
     @Override
     public Author save(Author author) {
+        em.setFlushMode(FlushModeType.COMMIT);
         if (author.getId() <= 0) {
             em.persist(author);
-            em.flush();
             return author;
         } else {
             em.merge(author);
-            em.flush();
             return author;
         }
     }
@@ -37,7 +33,6 @@ public class AuthorRepositoryJpa implements AuthorRepository {
         // check if exists by id
         Author author = findById(id);
         em.remove(author);
-        em.flush();
     }
 
     @Override

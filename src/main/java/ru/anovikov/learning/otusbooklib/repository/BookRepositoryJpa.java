@@ -24,11 +24,9 @@ public class BookRepositoryJpa implements BookRepository {
     public Book save(Book book) {
         if (book.getId() <= 0) {
             em.persist(book);
-            em.flush();
             return book;
         } else {
             em.merge(book);
-            em.flush();
             return book;
         }
     }
@@ -38,7 +36,6 @@ public class BookRepositoryJpa implements BookRepository {
         // check if exists by id
         Book book = findById(id);
         em.remove(book);
-        em.flush();
     };
 
     @Override

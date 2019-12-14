@@ -24,11 +24,9 @@ public class GenreRepositoryJpa implements GenreRepository {
     public Genre save(Genre genre){
         if (genre.getId() <= 0) {
             em.persist(genre);
-            em.flush();
             return  genre;
         } else {
             em.merge(genre);
-            em.flush();
             return genre;
         }
     }
