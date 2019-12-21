@@ -1,21 +1,16 @@
 package ru.anovikov.learning.otusbooklib.domain;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
-@Table(name = "author")
-@NamedQuery(name="Author.findAll", query="select a from Author a")
-@NamedQuery(name="Author.findByName", query="select a from Author a where a.firstName = :firstName and a.lastName = : lastName")
+@Document(collection = "authors")
 public class Author {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private String id;
 
-    @Column(name = "firstName", nullable = false)
     private String firstName;
 
-    @Column(name = "lastName", nullable = false)
     private String lastName;
 
     public Author() {};
@@ -25,17 +20,17 @@ public class Author {
         this.lastName = lastName;
     }
 
-    public Author(long id, String firstName, String lastName) {
+    public Author(String id, String firstName, String lastName) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -1,6 +1,6 @@
 package ru.anovikov.learning.otusbooklib.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 import ru.anovikov.learning.otusbooklib.domain.Author;
 import ru.anovikov.learning.otusbooklib.domain.Book;
@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface BookRepository extends JpaRepository<Book, Long> {
+public interface BookRepository extends MongoRepository<Book, String> {
 
     Book save(Book book);
 
     void delete(Book book);
 
-    Optional<Book> findById(long id);
+    Optional<Book> findById(String id);
 
     Optional<Book> findByTitle(String title);
 
@@ -24,5 +24,5 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     List<Book> findAll();
 
-    boolean existsById(long id);
+    boolean existsById(String id);
 }

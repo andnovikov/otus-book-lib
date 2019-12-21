@@ -6,11 +6,11 @@ public interface GenreService {
 
     Genre insert(String genreName);
 
-    Genre update(long id, String genreName);
+    Genre update(String id, String genreName);
 
-    void delete(long id);
+    void delete(String id);
 
-    Genre findById(long id);
+    Genre findById(String id);
 
     Genre findByName(String genreName);
 

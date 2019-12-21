@@ -38,7 +38,7 @@ public class BookServiceImpl implements BookService{
     }
 
     @Override
-    public Book update(long id, Author author, Genre genre, String title) {
+    public Book update(String id, Author author, Genre genre, String title) {
         //chek if exists
         if (!bookRepository.existsById(id)) {
             throw new NoDataFoundException();
@@ -55,7 +55,7 @@ public class BookServiceImpl implements BookService{
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(String id) {
         Optional<Book> foundBook = bookRepository.findById(id);
         if (!foundBook.isPresent()) {
             throw new NoDataFoundException();
@@ -64,7 +64,7 @@ public class BookServiceImpl implements BookService{
     }
 
     @Override
-    public Book findById(long id) {
+    public Book findById(String id) {
         Optional<Book> foundBook = bookRepository.findById(id);
         if (!foundBook.isPresent()) {
             throw new NoDataFoundException();

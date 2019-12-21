@@ -20,7 +20,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public Author insert(String firstName, String lastName) {
         // check for duplicate values
-        Optional<Author> foundAuthor = authorRepository.findByName(firstName, lastName);
+        Optional<Author> foundAuthor = authorRepository.findByFirstNameAndLastName(firstName, lastName);
         if (foundAuthor.isPresent()) {
             throw new DuplicateValueException();
         }
@@ -30,14 +30,14 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Author update(long id, String firstName, String lastName) {
+    public Author update(String id, String firstName, String lastName) {
         //chek if exists
         if (!authorRepository.existsById(id)) {
             throw new NoDataFoundException();
         }
         authorRepository.findById(id);
         // check for duplicate values
-        Optional<Author> foundAuthor = authorRepository.findByName(firstName, lastName);
+        Optional<Author> foundAuthor = authorRepository.findByFirstNameAndLastName(firstName, lastName);
         if (foundAuthor.isPresent() && (foundAuthor.get().getId() != id)) {
             throw new DuplicateValueException();
         }
@@ -47,7 +47,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(String id) {
         Optional<Author> foundAuthor = authorRepository.findById(id);
         if (!foundAuthor.isPresent()) {
             throw new NoDataFoundException();
@@ -57,14 +57,14 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public Author findByName(String firstName, String lastName) {
-        Optional<Author> foundAuthor = authorRepository.findByName(firstName, lastName);
+        Optional<Author> foundAuthor = authorRepository.findByFirstNameAndLastName(firstName, lastName);
         if (!foundAuthor.isPresent()) {
             throw new NoDataFoundException();
         }
         return foundAuthor.get();
     }
 
-    public Author findById(long id) {
+    public Author findById(String id) {
         Optional<Author> foundAuthor = authorRepository.findById(id);
         if (!foundAuthor.isPresent()) {
             throw new NoDataFoundException();

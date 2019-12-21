@@ -1,17 +1,14 @@
 package ru.anovikov.learning.otusbooklib.domain;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
-@NamedQuery(name="Genre.findAll", query="select g from Genre g")
-@NamedQuery(name="Genre.findByName", query="select g from Genre g where g.genreName = :genreName")
+@Document(collection = "genres")
 public class Genre {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private String id;
 
-    @Column(name = "genreName", nullable = false, unique = true)
     private String genreName;
 
     public Genre() {};
@@ -21,16 +18,16 @@ public class Genre {
         this.genreName = genreName;
     }
 
-    public Genre(long id, String genreName) {
+    public Genre(String id, String genreName) {
         this.id = id;
         this.genreName = genreName;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -7,11 +7,11 @@ import ru.anovikov.learning.otusbooklib.domain.Genre;
 public interface BookService {
     Book insert(Author author, Genre genre, String title);
 
-    Book update(long id, Author author, Genre genre, String title);
+    Book update(String id, Author author, Genre genre, String title);
 
-    void delete(long id);
+    void delete(String id);
 
-    Book findById(long id);
+    Book findById(String id);
 
     Book findByTitle(String title);
 

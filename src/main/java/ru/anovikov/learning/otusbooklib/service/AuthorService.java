@@ -6,12 +6,12 @@ public interface AuthorService {
 
     Author insert(String firstName, String lastName);
 
-    Author update(long id, String firstName, String lastName);
+    Author update(String id, String firstName, String lastName);
 
-    void delete(long id);
+    void delete(String id);
 
     Author findByName(String firstName, String lastName);
 
-    Author findById(long id);
+    Author findById(String id);
 
 }

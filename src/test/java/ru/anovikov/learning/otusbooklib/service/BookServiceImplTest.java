@@ -21,15 +21,15 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 class BookServiceImplTest {
 
-    public static final long FIELD_AUTHOR_ID = 0;
+    public static final String FIELD_AUTHOR_ID = "";
     public static final String FIELD_AUTHOR_FIRSTNAME = "testAuthotFirstname";
     public static final String FIELD_AUTHOR_LASTNAME = "testAuthorLastname";
-    public static final long FIELD_GENRE_ID = 0;
+    public static final String FIELD_GENRE_ID = "";
     public static final String FIELD_GENRE_NAME = "testGenre";
 
     public static final String FIELD_READ_TITLE = "read.book.title";
     public static final String FIELD_READ_ID = "read.book.id";
-    public static final long FIELD_BOOK_ID = 1;
+    public static final String FIELD_BOOK_ID = "";
     public static final String FIELD_BOOK_TITLE = "testBookTitle";
 
     @InjectMocks
@@ -77,9 +77,9 @@ class BookServiceImplTest {
 
         when(authorService.findByName(anyString(), anyString())).thenReturn(author);
         when(genreService.findByName(anyString())).thenReturn(genre);
-        when(consoleService.readLong(FIELD_READ_ID)).thenReturn(FIELD_BOOK_ID);
+        when(consoleService.readString(FIELD_READ_ID)).thenReturn(FIELD_BOOK_ID);
         when(consoleService.readString(FIELD_READ_TITLE)).thenReturn(FIELD_BOOK_TITLE);
-        when(bookRepository.existsById(anyLong())).thenReturn(true);
+        when(bookRepository.existsById(anyString())).thenReturn(true);
         when(bookRepository.save(any())).thenReturn(book);
 
         assertEquals(bookService.update(FIELD_BOOK_ID, author, genre, FIELD_BOOK_TITLE), book);
@@ -106,7 +106,7 @@ class BookServiceImplTest {
         Book book = new Book(author, genre, FIELD_BOOK_TITLE);
 
         when(bookRepository.findByAuthorAndGenreAndTitle(any(), any(), anyString())).thenReturn(Optional.of(book));
-        when(bookRepository.existsById(anyLong())).thenReturn(true);
+        when(bookRepository.existsById(anyString())).thenReturn(true);
         when(bookRepository.save(any())).thenReturn(book);
 
         assertThrows(DuplicateValueException.class, () -> {

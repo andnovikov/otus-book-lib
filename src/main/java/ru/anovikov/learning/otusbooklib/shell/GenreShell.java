@@ -39,7 +39,7 @@ public class GenreShell {
     @ShellMethod(value = "Update genre", key = {"update-genre", "ug"})
     public void updateGenre() {
         try {
-            long id = consoleService.readLong("read.genre.id");
+            String id = consoleService.readString("read.genre.id");
             String genreName = consoleService.readString("read.genre.genrename");
             Genre genre = genreService.update(id, genreName);
             printGenre(genre);
@@ -58,7 +58,7 @@ public class GenreShell {
     @ShellMethod(value = "Delete genre", key = {"delete-genre", "dg"})
     public void deleteGenre() {
         try {
-            long id = consoleService.readLong("read.genre.id");
+            String id = consoleService.readString("read.genre.id");
             genreService.delete(id);
         }
         catch (NoDataFoundException e) {
@@ -73,7 +73,7 @@ public class GenreShell {
     @ShellMethod(value = "Find genre by id", key = {"find-genre-id", "fgi"})
     public void findGenrebyId() {
         try {
-            long id = consoleService.readLong("read.genre.id");
+            String id = consoleService.readString("read.genre.id");
             Genre genre = genreService.findById(id);
             printGenre(genre);
         }

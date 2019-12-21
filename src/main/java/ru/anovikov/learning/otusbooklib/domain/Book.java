@@ -1,27 +1,18 @@
 package ru.anovikov.learning.otusbooklib.domain;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
-@NamedQuery(name="Book.findAll", query="select b from Book b join fetch b.author join fetch b.genre")
-@NamedQuery(name="Book.findById", query="select b from Book b join fetch b.author join fetch b.genre where b.id = :bookId")
-@NamedQuery(name="Book.findByTitle", query="select b from Book b join fetch b.author join fetch b.genre where b.title = :title")
-@NamedQuery(name="Book.findByParam", query="select b from Book b join fetch b.author join fetch b.genre where b.author.id = :authorId and b.genre.id = :genreId and b.title = :title")
+@Document(collection = "books")
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private String id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "authorId")
     private Author author;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "genreId")
     private Genre genre;
 
-    @Column(name = "title", nullable = false)
     private String title;
 
     public Book() {};
@@ -32,18 +23,18 @@ public class Book {
         this.author = author;
     }
 
-    public Book(long id, Author author, Genre genre, String title){
+    public Book(String id, Author author, Genre genre, String title){
         this.id = id;
         this.genre = genre;
         this.title = title;
         this.author = author;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

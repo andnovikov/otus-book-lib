@@ -1,21 +1,16 @@
 package ru.anovikov.learning.otusbooklib.domain;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
-@NamedQuery(name="Comment.findAll", query="select c from Comment c")
-@NamedQuery(name="Comment.findByBook", query="select c from Comment c where c.book.id = :bookId")
+@Document(collection = "comments")
 public class Comment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private String id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bookId")
     private Book book;
-
-    @Column(name = "commentText")
+    
     private String commentText;
 
     public Comment() {};
@@ -25,11 +20,11 @@ public class Comment {
         this.commentText = commentText;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

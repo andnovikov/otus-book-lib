@@ -1,26 +1,24 @@
 package ru.anovikov.learning.otusbooklib.service;
 
 import org.junit.Before;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.junit.jupiter.api.Test;
 import ru.anovikov.learning.otusbooklib.domain.Genre;
 import ru.anovikov.learning.otusbooklib.repository.GenreRepository;
 
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class GenreServiceImplTest {
 
-    public static final long FIELD_ID = 1;
+    public static final String FIELD_ID = "";
     public static final String FIELD_GENRENAME = "genre3";
 
     @InjectMocks
@@ -48,7 +46,7 @@ class GenreServiceImplTest {
     void shouldCheckDuplicateUpdateGenre() {
         Genre genre = new Genre(FIELD_GENRENAME);
         when(genreRepository.findByGenreName(anyString())).thenReturn(Optional.of(genre));
-        when(genreRepository.existsById(anyLong())).thenReturn(true);
+        when(genreRepository.existsById(anyString())).thenReturn(true);
 
         assertThrows(DuplicateValueException.class, () -> {
             genreService.update(FIELD_ID, FIELD_GENRENAME);

@@ -1,17 +1,11 @@
 package ru.anovikov.learning.otusbooklib.repository;
 
-import org.hibernate.SessionFactory;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
-import ru.anovikov.learning.otusbooklib.domain.Author;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Repository for authors")
 @RunWith(SpringRunner.class)
@@ -32,17 +26,7 @@ class AuthorRepositoryTest {
 
     @Autowired
     private TestEntityManager em;
-
-    private SessionFactory sessionFactory;
-
-    @BeforeEach
-    void setUp() {
-        sessionFactory = em.getEntityManager().getEntityManagerFactory()
-                .unwrap(SessionFactory.class);
-        sessionFactory.getStatistics().setStatisticsEnabled(true);
-        sessionFactory.getStatistics().clear();
-    }
-
+/*
     @Test
     void shouldSaveAndLoadCorrectAuthor() {
         Author author = new Author(FIELD_INS_FIRSTNAME, FIELD_INS_LASTNAME);
@@ -65,4 +49,5 @@ class AuthorRepositoryTest {
         authorRepository.delete(author);
         assertThat(authorRepository.findById(FIELD_DEL_ID)).isNotPresent();
     }
+    */
 }

@@ -40,7 +40,7 @@ public class AuthorShell {
     @ShellMethod(value = "Update author", key = {"update-author", "ua"})
     public void updateAuthor() {
         try {
-            long id = consoleService.readLong("read.author.id");
+            String id = consoleService.readString("read.author.id");
             String firstName = consoleService.readString("read.author.firstname");
             String lastName = consoleService.readString("read.author.lastname");
             Author author = authorService.update(id, firstName, lastName);
@@ -60,7 +60,7 @@ public class AuthorShell {
     @ShellMethod(value = "Delete author", key = {"delete-author", "da"})
     public void deleteAuthor() {
         try {
-            long id = consoleService.readLong("read.author.id");
+            String id = consoleService.readString("read.author.id");
             authorService.delete(id);
         }
         catch (NoDataFoundException e) {
@@ -74,7 +74,7 @@ public class AuthorShell {
     @ShellMethod(value = "Find author by id", key = {"find-author-id", "fai"})
     public void findAuthorById() {
         try {
-            long id = consoleService.readLong("read.author.id");
+            String id = consoleService.readString("read.author.id");
             Author author = authorService.findById(id);
             printAuthor(author);
 

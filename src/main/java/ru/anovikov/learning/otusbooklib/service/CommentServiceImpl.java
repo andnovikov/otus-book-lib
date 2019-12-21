@@ -28,7 +28,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(String id) {
         Optional<Comment> foundComment = commentRepository.findById(id);
         if (!foundComment.isPresent()) {
             throw new NoDataFoundException();
@@ -37,7 +37,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment findById(long id) {
+    public Comment findById(String id) {
         Optional<Comment> foundComment = commentRepository.findById(id);
         if (!foundComment.isPresent()) {
             throw new NoDataFoundException();
