@@ -10,24 +10,23 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ru.anovikov.learning.otusbooklib.domain.Book;
 import ru.anovikov.learning.otusbooklib.domain.Comment;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @DisplayName("Repository for comments")
 @RunWith(SpringRunner.class)
 @DataMongoTest
 class CommentRepositoryTest {
 
-    private static final long FIELD_INS_BOOKID = 1;
+    private static final String FIELD_INS_BOOKID = "";
     private static final String FIELD_INS_COMMENTTEXT = "comment1";
 
-    private static final long FIELD_DEL_ID = 1;
+    private static final String FIELD_DEL_ID = "1";
 
     @Autowired
     private BookRepository bookRepository;
 
     @Autowired
     private CommentRepository commentRepository;
-
-    @Autowired
-    private TestEntityManager em;
 
     @Test
     void shouldSaveAndLoadCorrectComment() {

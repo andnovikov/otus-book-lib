@@ -10,21 +10,23 @@ import ru.anovikov.learning.otusbooklib.domain.Author;
 import ru.anovikov.learning.otusbooklib.domain.Book;
 import ru.anovikov.learning.otusbooklib.domain.Genre;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @DisplayName("Repository for books")
 @RunWith(SpringRunner.class)
 @DataMongoTest
 class BookRepositoryTest {
 
-    private static final long FIELD_INS_GENREID = 1;
-    private static final long FIELD_INS_AUTHORID = 1;
+    private static final String FIELD_INS_GENREID = "1";
+    private static final String FIELD_INS_AUTHORID = "1";
     private static final String FIELD_INS_TITLE = "book1";
 
-    private static final long FIELD_UPD_ID = 1;
-    private static final long FIELD_UPD_GENREID = 1;
-    private static final long FIELD_UPD_AUTHORID = 1;
+    private static final String FIELD_UPD_ID = "1";
+    private static final String FIELD_UPD_GENREID = "1";
+    private static final String FIELD_UPD_AUTHORID = "1";
     private static final String FIELD_UPD_TITLE = "book2";
 
-    private static final long FIELD_DEL_ID = 2;
+    private static final String FIELD_DEL_ID = "2";
 
     @Autowired
     private BookRepository bookRepository;

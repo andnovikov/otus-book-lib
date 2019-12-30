@@ -1,5 +1,6 @@
 package ru.anovikov.learning.otusbooklib.repository;
 
+import org.junit.Before;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -7,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.anovikov.learning.otusbooklib.domain.Author;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Repository for authors")
 @RunWith(SpringRunner.class)
@@ -25,26 +28,22 @@ class AuthorRepositoryTest {
     @Autowired
     private AuthorRepository authorRepository;
 
-    @Test
-    void shouldSaveAndLoadCorrectAuthor() {
-        Author author = new Author(FIELD_INS_FIRSTNAME, FIELD_INS_LASTNAME);
-        author = authorRepository.save(author);
-        assertThat(authorRepository.findById(author.getId())).get()
-                .hasFieldOrPropertyWithValue("firstName", FIELD_INS_FIRSTNAME);
+    private Author author;
+
+    @Before
+    public void init(){
+        author = authorRepository.save(new Author(FIELD_INS_FIRSTNAME, FIELD_INS_LASTNAME));
     }
 
     @Test
-    void shouldUpateAuthor() {
-        Author author = new Author(FIELD_UPD_ID, FIELD_UPD_FIRSTNAME, FIELD_UPD_LASTNAME);
-        authorRepository.save(author);
-        assertThat(authorRepository.findById(FIELD_UPD_ID)).get()
-                .hasFieldOrPropertyWithValue("firstName", FIELD_UPD_FIRSTNAME);
+    void shouldSaveAndLoadCorrectAuthor() {
+        assertThat(author.getFirstName()).isEqualTo(FIELD_INS_FIRSTNAME);
+        assertThat(author.getLastName()).isEqualTo(FIELD_INS_LASTNAME);
     }
 
     @Test
     void shouldDeleteAuthor() {
-        Author author = authorRepository.findById(FIELD_DEL_ID).get();
         authorRepository.delete(author);
-        assertThat(authorRepository.findById(FIELD_DEL_ID)).isNotPresent();
+        assertThat(authorRepository.findById(author.getId())).isNotPresent();
     }
 }
