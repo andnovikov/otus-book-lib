@@ -1,15 +1,18 @@
 package ru.anovikov.learning.otusbooklib.repository;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import ru.anovikov.learning.otusbooklib.domain.Author;
+import ru.anovikov.learning.otusbooklib.domain.Book;
+import ru.anovikov.learning.otusbooklib.domain.Genre;
 
 @DisplayName("Repository for books")
 @RunWith(SpringRunner.class)
-@DataJpaTest
+@DataMongoTest
 class BookRepositoryTest {
 
     private static final long FIELD_INS_GENREID = 1;
@@ -32,10 +35,7 @@ class BookRepositoryTest {
     @Autowired
     private GenreRepository genreRepository;
 
-    @Autowired
-    private TestEntityManager em;
-/*
-    @Test
+    @org.testng.annotations.Test
     void shouldSaveAndLoadCorrectBook() {
         Author author = authorRepository.findById(FIELD_INS_AUTHORID).get();
         Genre genre = genreRepository.findById(FIELD_INS_GENREID).get();
@@ -62,5 +62,4 @@ class BookRepositoryTest {
         assertThat(bookRepository.findById(FIELD_DEL_ID)).isNotPresent();
     }
 
- */
 }

@@ -1,14 +1,16 @@
 package ru.anovikov.learning.otusbooklib.repository;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import ru.anovikov.learning.otusbooklib.domain.Genre;
 
 @DisplayName("Repository for genre")
 @RunWith(SpringRunner.class)
-@DataJpaTest
+@DataMongoTest
 class GenreRepositoryTest {
 
     private static final String FIELD_INS_GENRENAME = "genre1";
@@ -20,7 +22,7 @@ class GenreRepositoryTest {
 
     @Autowired
     private GenreRepository genreRepository;
-/*
+
     @Test
     void shouldSaveAndLoadCorrectGenre() {
         Genre genre = new Genre(FIELD_INS_GENRENAME);
@@ -44,5 +46,4 @@ class GenreRepositoryTest {
         assertThat(genreRepository.findById(FIELD_DEL_ID)).isNotPresent();
     }
 
- */
 }

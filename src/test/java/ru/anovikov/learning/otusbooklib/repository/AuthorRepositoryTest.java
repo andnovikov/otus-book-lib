@@ -1,15 +1,16 @@
 package ru.anovikov.learning.otusbooklib.repository;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import ru.anovikov.learning.otusbooklib.domain.Author;
 
 @DisplayName("Repository for authors")
 @RunWith(SpringRunner.class)
-@DataJpaTest
+@DataMongoTest
 class AuthorRepositoryTest {
 
     private static final String FIELD_INS_FIRSTNAME = "firstname";
@@ -24,9 +25,6 @@ class AuthorRepositoryTest {
     @Autowired
     private AuthorRepository authorRepository;
 
-    @Autowired
-    private TestEntityManager em;
-/*
     @Test
     void shouldSaveAndLoadCorrectAuthor() {
         Author author = new Author(FIELD_INS_FIRSTNAME, FIELD_INS_LASTNAME);
@@ -49,5 +47,4 @@ class AuthorRepositoryTest {
         authorRepository.delete(author);
         assertThat(authorRepository.findById(FIELD_DEL_ID)).isNotPresent();
     }
-    */
 }
