@@ -1,8 +1,8 @@
 package ru.anovikov.learning.otusbooklib.repository;
 
-import org.junit.Before;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("Repository for genre")
 @RunWith(SpringRunner.class)
 @DataMongoTest
-class GenreRepositoryTest {
+public class GenreRepositoryTest {
 
     private static final String FIELD_INS_GENRENAME = "genre1";
 
@@ -34,12 +34,12 @@ class GenreRepositoryTest {
     }
 
     @Test
-    void shouldSaveAndLoadCorrectGenre() {
+    public void shouldSaveAndLoadCorrectGenre() {
         assertThat(genre.getGenreName()).isEqualTo(FIELD_INS_GENRENAME);
     }
 
     @Test
-    void shouldDeleteGenre() {
+    public void shouldDeleteGenre() {
         genreRepository.delete(genre);
         assertThat(genreRepository.findById(genre.getId())).isNotPresent();
     }

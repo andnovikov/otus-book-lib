@@ -1,7 +1,8 @@
 package ru.anovikov.learning.otusbooklib.repository;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
@@ -15,18 +16,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("Repository for books")
 @RunWith(SpringRunner.class)
 @DataMongoTest
-class BookRepositoryTest {
+public class BookRepositoryTest {
 
-    private static final String FIELD_INS_GENREID = "1";
-    private static final String FIELD_INS_AUTHORID = "1";
     private static final String FIELD_INS_TITLE = "book1";
-
-    private static final String FIELD_UPD_ID = "1";
-    private static final String FIELD_UPD_GENREID = "1";
-    private static final String FIELD_UPD_AUTHORID = "1";
-    private static final String FIELD_UPD_TITLE = "book2";
-
-    private static final String FIELD_DEL_ID = "2";
+    private static final String FIELD_INS_FIRSTNAME = "firstname";
+    private static final String FIELD_INS_LASTNAME = "lastname";
+    private static final String FIELD_INS_GENRENAME = "genre";
 
     @Autowired
     private BookRepository bookRepository;
@@ -37,31 +32,26 @@ class BookRepositoryTest {
     @Autowired
     private GenreRepository genreRepository;
 
+    private Author author;
+    private Book book;
+    private Genre genre;
+
+    @Before
+    public void init(){
+        author = authorRepository.save(new Author(FIELD_INS_FIRSTNAME, FIELD_INS_LASTNAME));
+        genre = genreRepository.save(new Genre(FIELD_INS_GENRENAME));
+        book = bookRepository.save(new Book(author, genre, FIELD_INS_TITLE));
+    }
+
     @org.testng.annotations.Test
-    void shouldSaveAndLoadCorrectBook() {
-        Author author = authorRepository.findById(FIELD_INS_AUTHORID).get();
-        Genre genre = genreRepository.findById(FIELD_INS_GENREID).get();
-        Book book = new Book(author, genre, FIELD_INS_TITLE);
-        bookRepository.save(book);
-        assertThat(bookRepository.findById(book.getId())).get()
-                .hasFieldOrPropertyWithValue("title", FIELD_INS_TITLE);
+    public void shouldSaveAndLoadCorrectBook() {
+        assertThat(book.getTitle()).isEqualTo(FIELD_INS_TITLE);
     }
 
     @Test
-    void shouldUpdateBook() {
-        Author author = authorRepository.findById(FIELD_UPD_AUTHORID).get();
-        Genre genre = genreRepository.findById(FIELD_UPD_GENREID).get();
-        Book book = new Book(FIELD_UPD_ID, author, genre, FIELD_UPD_TITLE);
-        bookRepository.save(book);
-        assertThat(bookRepository.findById(FIELD_UPD_ID)).get()
-                .hasFieldOrPropertyWithValue("title", FIELD_UPD_TITLE);
-    }
-
-    @Test
-    void shouldDeleteBook() {
-        Book book = bookRepository.findById(FIELD_DEL_ID).get();
+    public void shouldDeleteBook() {
         bookRepository.delete(book);
-        assertThat(bookRepository.findById(FIELD_DEL_ID)).isNotPresent();
+        assertThat(bookRepository.findById(book.getId())).isNotPresent();
     }
 
 }
