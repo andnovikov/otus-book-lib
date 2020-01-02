@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import ru.anovikov.learning.otusbooklib.service.DuplicateValueException;
-import ru.anovikov.learning.otusbooklib.repository.NoDataFoundException;
+import ru.anovikov.learning.otusbooklib.service.NoDataFoundException;
 import ru.anovikov.learning.otusbooklib.domain.Author;
 import ru.anovikov.learning.otusbooklib.domain.Book;
 import ru.anovikov.learning.otusbooklib.domain.Genre;

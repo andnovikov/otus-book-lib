@@ -1,19 +1,25 @@
 package ru.anovikov.learning.otusbooklib.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import ru.anovikov.learning.otusbooklib.domain.Author;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface AuthorRepository {
+@Repository
+public interface AuthorRepository extends JpaRepository<Author, Long> {
 
     Author save(Author author);
 
-    void delete(long id);
+    void delete(Author author);
 
-    Author findById(long id);
+    Optional<Author> findById(long id);
 
-    Author findByName(String firstName, String lastName);
+    Optional<Author> findByName(String firstName, String lastName);
 
-    List<Author> getAll();
+    List<Author> findAll();
+
+    boolean existsById(long id);
 
 }

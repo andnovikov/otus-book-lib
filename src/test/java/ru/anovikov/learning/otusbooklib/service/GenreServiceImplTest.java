@@ -9,6 +9,9 @@ import org.junit.jupiter.api.Test;
 import ru.anovikov.learning.otusbooklib.domain.Genre;
 import ru.anovikov.learning.otusbooklib.repository.GenreRepository;
 
+import java.util.Optional;
+
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -32,9 +35,9 @@ class GenreServiceImplTest {
     }
 
     @Test
-    void shouldCheckDuplicateInsertAuthor() {
+    void shouldCheckDuplicateInsertGenre() {
         Genre genre = new Genre(FIELD_GENRENAME);
-        when(genreRepository.findByName(anyString())).thenReturn(genre);
+        when(genreRepository.findByGenreName(anyString())).thenReturn(Optional.of(genre));
 
         assertThrows(DuplicateValueException.class, () -> {
             genreService.insert(FIELD_GENRENAME);
@@ -42,9 +45,10 @@ class GenreServiceImplTest {
     }
 
     @Test
-    void shouldCheckDuplicateInsertGenre() {
+    void shouldCheckDuplicateUpdateGenre() {
         Genre genre = new Genre(FIELD_GENRENAME);
-        when(genreRepository.findByName(anyString())).thenReturn(genre);
+        when(genreRepository.findByGenreName(anyString())).thenReturn(Optional.of(genre));
+        when(genreRepository.existsById(anyLong())).thenReturn(true);
 
         assertThrows(DuplicateValueException.class, () -> {
             genreService.update(FIELD_ID, FIELD_GENRENAME);

@@ -4,7 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.anovikov.learning.otusbooklib.repository.GenreRepository;
 import ru.anovikov.learning.otusbooklib.domain.Genre;
-import ru.anovikov.learning.otusbooklib.repository.NoDataFoundException;
+
+import java.util.Optional;
 
 @Service
 public class GenreServiceImpl implements GenreService {
@@ -21,14 +22,9 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public Genre insert(String genreName) {
         // check for duplicate values
-        try {
-            Genre foundGenre = genreRepository.findByName(genreName);
-            if (foundGenre != null) {
-                throw new DuplicateValueException();
-            }
-        }
-        catch (NoDataFoundException e) {
-            // do nothing
+        Optional<Genre> foundGenre = genreRepository.findByGenreName(genreName);
+        if (foundGenre.isPresent()) {
+            throw new DuplicateValueException();
         }
         Genre genre = new Genre(genreName);
         genre = genreRepository.save(genre);
@@ -38,39 +34,44 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public Genre update(long id, String genreName) {
         //chek if exists
-        genreRepository.findById(id);
+        if (!genreRepository.existsById(id)) {
+            throw new NoDataFoundException();
+        }
         // check for duplicate values
-        try {
-            Genre foundGenre = genreRepository.findByName(genreName);
-            if ((foundGenre != null) && (foundGenre.getId() != id)) {
-                throw new DuplicateValueException();
-            }
+        Optional<Genre> foundGenre = genreRepository.findByGenreName(genreName);
+        if (foundGenre.isPresent() && (foundGenre.get().getId() != id)) {
+            throw new DuplicateValueException();
         }
-        catch (NoDataFoundException e) {
-            // do nothing
-        }
-
         Genre genre = new Genre(id, genreName);
-        genreRepository.save(genre);
-        genre = genreRepository.findById(id);
+        genre = genreRepository.save(genre);
         return genre;
     }
 
     @Override
     public void delete(long id) {
-        genreRepository.delete(id);
+        Optional<Genre> foundGenre = genreRepository.findById(id);
+        if (!foundGenre.isPresent()) {
+            throw new NoDataFoundException();
+        }
+        genreRepository.delete(foundGenre.get());
     }
 
     @Override
     public Genre findById(long id){
-        Genre genre = genreRepository.findById(id);
-        return genre;
+        Optional<Genre> foundGenre = genreRepository.findById(id);
+        if (!foundGenre.isPresent()) {
+            throw new NoDataFoundException();
+        }
+        return foundGenre.get();
     }
 
     @Override
     public Genre findByName(String genreName){
-        Genre genre = genreRepository.findByName(genreName);
-        return genre;
+        Optional<Genre> foundGenre = genreRepository.findByGenreName(genreName);
+        if (!foundGenre.isPresent()) {
+            throw new NoDataFoundException();
+        }
+        return foundGenre.get();
     }
 
 }

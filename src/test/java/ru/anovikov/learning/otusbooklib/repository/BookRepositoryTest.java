@@ -4,21 +4,21 @@ import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
+import org.springframework.test.context.junit4.SpringRunner;
 import ru.anovikov.learning.otusbooklib.domain.Author;
 import ru.anovikov.learning.otusbooklib.domain.Book;
 import ru.anovikov.learning.otusbooklib.domain.Genre;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@DisplayName("Repository JPA for books")
+@DisplayName("Repository for books")
+@RunWith(SpringRunner.class)
 @DataJpaTest
-@Import({BookRepositoryJpa.class, AuthorRepositoryJpa.class, GenreRepositoryJpa.class})
-class BookRepositoryJpaTest {
+class BookRepositoryTest {
 
     private static final long FIELD_INS_GENREID = 1;
     private static final long FIELD_INS_AUTHORID = 1;
@@ -32,13 +32,13 @@ class BookRepositoryJpaTest {
     private static final long FIELD_DEL_ID = 2;
 
     @Autowired
-    private BookRepositoryJpa bookRepositoryJpa;
+    private BookRepository bookRepository;
 
     @Autowired
-    private AuthorRepositoryJpa authorRepository;
+    private AuthorRepository authorRepository;
 
     @Autowired
-    private GenreRepositoryJpa genreRepository;
+    private GenreRepository genreRepository;
 
     @Autowired
     private TestEntityManager em;
@@ -55,28 +55,28 @@ class BookRepositoryJpaTest {
 
     @Test
     void shouldSaveAndLoadCorrectBook() {
-        Author author = authorRepository.findById(FIELD_INS_AUTHORID);
-        Genre genre = genreRepository.findById(FIELD_INS_GENREID);
+        Author author = authorRepository.findById(FIELD_INS_AUTHORID).get();
+        Genre genre = genreRepository.findById(FIELD_INS_GENREID).get();
         Book book = new Book(author, genre, FIELD_INS_TITLE);
-        bookRepositoryJpa.save(book);
-        assertThat(bookRepositoryJpa.findById(book.getId()))
+        bookRepository.save(book);
+        assertThat(bookRepository.findById(book.getId())).get()
                 .hasFieldOrPropertyWithValue("title", FIELD_INS_TITLE);
     }
 
     @Test
     void shouldUpdateBook() {
-        Author author = authorRepository.findById(FIELD_UPD_AUTHORID);
-        Genre genre = genreRepository.findById(FIELD_UPD_GENREID);
+        Author author = authorRepository.findById(FIELD_UPD_AUTHORID).get();
+        Genre genre = genreRepository.findById(FIELD_UPD_GENREID).get();
         Book book = new Book(FIELD_UPD_ID, author, genre, FIELD_UPD_TITLE);
-        bookRepositoryJpa.save(book);
-        assertThat(bookRepositoryJpa.findById(FIELD_UPD_ID))
+        bookRepository.save(book);
+        assertThat(bookRepository.findById(FIELD_UPD_ID)).get()
                 .hasFieldOrPropertyWithValue("title", FIELD_UPD_TITLE);
     }
 
     @Test
     void shouldDeleteBook() {
-        bookRepositoryJpa.delete(FIELD_DEL_ID);
-        assertThrows(NoDataFoundException.class, () -> {
-            bookRepositoryJpa.findById(FIELD_DEL_ID);});
+        Book book = bookRepository.findById(FIELD_DEL_ID).get();
+        bookRepository.delete(book);
+        assertThat(bookRepository.findById(FIELD_DEL_ID)).isNotPresent();
     }
 }

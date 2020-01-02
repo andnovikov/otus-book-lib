@@ -6,7 +6,8 @@ import ru.anovikov.learning.otusbooklib.domain.Author;
 import ru.anovikov.learning.otusbooklib.domain.Book;
 import ru.anovikov.learning.otusbooklib.domain.Genre;
 import ru.anovikov.learning.otusbooklib.repository.BookRepository;
-import ru.anovikov.learning.otusbooklib.repository.NoDataFoundException;
+
+import java.util.Optional;
 
 @Service
 public class BookServiceImpl implements BookService{
@@ -27,16 +28,10 @@ public class BookServiceImpl implements BookService{
     @Override
     public Book insert(Author author, Genre genre, String title) {
         // check for duplicate values
-        try {
-            Book foundBook = bookRepository.findByParam(author.getId(), genre.getId(), title);
-            if (foundBook != null) {
-                throw new DuplicateValueException();
-            }
+        Optional<Book> foundBook = bookRepository.findByAuthorAndGenreAndTitle(author, genre, title);
+        if (foundBook.isPresent()) {
+            throw new DuplicateValueException();
         }
-        catch (NoDataFoundException e) {
-            // do nothing
-        }
-
         Book book = new Book(author, genre, title);
         book = bookRepository.save(book);
         return book;
@@ -45,16 +40,13 @@ public class BookServiceImpl implements BookService{
     @Override
     public Book update(long id, Author author, Genre genre, String title) {
         //chek if exists
-        bookRepository.findById(id);
-        // check for duplicate values
-        try {
-            Book foundBook = bookRepository.findByParam(author.getId(), genre.getId(), title);
-            if (foundBook != null) {
-                throw new DuplicateValueException();
-            }
+        if (!bookRepository.existsById(id)) {
+            throw new NoDataFoundException();
         }
-        catch (NoDataFoundException e) {
-            // do nothing
+        // check for duplicate values
+        Optional<Book> foundBook = bookRepository.findByAuthorAndGenreAndTitle(author, genre, title);
+        if (foundBook.isPresent() && (foundBook.get().getId() != id)) {
+            throw new DuplicateValueException();
         }
 
         Book book = new Book(id, author, genre, title);
@@ -64,16 +56,28 @@ public class BookServiceImpl implements BookService{
 
     @Override
     public void delete(long id) {
-        bookRepository.delete(id);
+        Optional<Book> foundBook = bookRepository.findById(id);
+        if (!foundBook.isPresent()) {
+            throw new NoDataFoundException();
+        }
+        bookRepository.delete(foundBook.get());
     }
 
     @Override
     public Book findById(long id) {
-        return bookRepository.findById(id);
+        Optional<Book> foundBook = bookRepository.findById(id);
+        if (!foundBook.isPresent()) {
+            throw new NoDataFoundException();
+        }
+        return foundBook.get();
     };
 
     @Override
     public Book findByTitle(String title) {
-        return bookRepository.findByTitle(title);
+        Optional<Book> foundBook = bookRepository.findByTitle(title);;
+        if (!foundBook.isPresent()) {
+            throw new NoDataFoundException();
+        }
+        return foundBook.get();
     };
 }

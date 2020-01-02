@@ -4,19 +4,19 @@ import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
+import org.springframework.test.context.junit4.SpringRunner;
 import ru.anovikov.learning.otusbooklib.domain.Author;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@DisplayName("Repository JPA for authors")
+@DisplayName("Repository for authors")
+@RunWith(SpringRunner.class)
 @DataJpaTest
-@Import({AuthorRepositoryJpa.class})
-class AuthorRepositoryJpaTest {
+class AuthorRepositoryTest {
 
     private static final String FIELD_INS_FIRSTNAME = "firstname";
     private static final String FIELD_INS_LASTNAME = "lastname";
@@ -28,7 +28,7 @@ class AuthorRepositoryJpaTest {
     private static final long FIELD_DEL_ID = 3;
 
     @Autowired
-    private AuthorRepositoryJpa authorRepositoryJpa;
+    private AuthorRepository authorRepository;
 
     @Autowired
     private TestEntityManager em;
@@ -46,23 +46,23 @@ class AuthorRepositoryJpaTest {
     @Test
     void shouldSaveAndLoadCorrectAuthor() {
         Author author = new Author(FIELD_INS_FIRSTNAME, FIELD_INS_LASTNAME);
-        author = authorRepositoryJpa.save(author);
-        assertThat(authorRepositoryJpa.findById(author.getId()))
+        author = authorRepository.save(author);
+        assertThat(authorRepository.findById(author.getId())).get()
                 .hasFieldOrPropertyWithValue("firstName", FIELD_INS_FIRSTNAME);
     }
 
     @Test
     void shouldUpateAuthor() {
         Author author = new Author(FIELD_UPD_ID, FIELD_UPD_FIRSTNAME, FIELD_UPD_LASTNAME);
-        authorRepositoryJpa.save(author);
-        assertThat(authorRepositoryJpa.findById(FIELD_UPD_ID))
+        authorRepository.save(author);
+        assertThat(authorRepository.findById(FIELD_UPD_ID)).get()
                 .hasFieldOrPropertyWithValue("firstName", FIELD_UPD_FIRSTNAME);
     }
 
     @Test
     void shouldDeleteAuthor() {
-        authorRepositoryJpa.delete(FIELD_DEL_ID);
-        assertThrows(NoDataFoundException.class, () -> {
-            authorRepositoryJpa.findById(FIELD_DEL_ID);});
+        Author author = authorRepository.findById(FIELD_DEL_ID).get();
+        authorRepository.delete(author);
+        assertThat(authorRepository.findById(FIELD_DEL_ID)).isNotPresent();
     }
 }

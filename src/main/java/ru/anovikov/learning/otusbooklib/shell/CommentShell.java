@@ -5,7 +5,7 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import ru.anovikov.learning.otusbooklib.domain.Book;
 import ru.anovikov.learning.otusbooklib.domain.Comment;
-import ru.anovikov.learning.otusbooklib.repository.NoDataFoundException;
+import ru.anovikov.learning.otusbooklib.service.NoDataFoundException;
 import ru.anovikov.learning.otusbooklib.service.BookService;
 import ru.anovikov.learning.otusbooklib.service.CommentService;
 import ru.anovikov.learning.otusbooklib.service.ConsoleService;
