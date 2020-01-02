@@ -33,7 +33,7 @@ public class CommentShell {
     @ShellMethod(value = "Add book comment", key = {"add-book-cmnt", "abc"})
     public void addBookComment() {
         try {
-            long id = consoleService.readLong("read.book.id");
+            String id = consoleService.readString("read.book.id");
             Book book = bookService.findById(id);
 
             String commentText = consoleService.readString("read.comment.text");
@@ -52,7 +52,7 @@ public class CommentShell {
     @ShellMethod(value = "Del book comment", key = {"del-book-cmnt", "dbc"})
     public void delBookComment() {
         try {
-            long id = consoleService.readLong("read.comment.id");
+            String id = consoleService.readString("read.comment.id");
             commentService.delete(id);
         }
         catch (NoDataFoundException e) {
@@ -66,7 +66,7 @@ public class CommentShell {
     @ShellMethod(value = "Find comment by id", key = {"find-comment-id", "fci"})
     public void findCommentById() {
         try {
-            long id = consoleService.readLong("read.comment.id");
+            String id = consoleService.readString("read.comment.id");
             Comment comment = commentService.findById(id);
             printComment(comment);
         }
@@ -81,7 +81,7 @@ public class CommentShell {
     @ShellMethod(value = "Find comment by book", key = {"find-comment-book", "fcb"})
     public void findCommentByBook() {
         try {
-            long id = consoleService.readLong("read.book.id");
+            String id = consoleService.readString("read.book.id");
             Book book = bookService.findById(id);
 
             List<Comment> comments = commentService.findByBook(book);

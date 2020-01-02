@@ -9,9 +9,9 @@ public interface CommentService {
 
     Comment insert(Book book, String commentText);
 
-    void delete(long id);
+    void delete(String id);
 
-    Comment findById(long id);
+    Comment findById(String id);
 
     List<Comment> findByBook(Book book);
 

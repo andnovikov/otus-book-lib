@@ -72,7 +72,7 @@ public class BookShell {
     @ShellMethod(value = "Update book", key = {"update-book", "ub"})
     public void updateBook() {
         try {
-            long id = consoleService.readLong("read.book.id");
+            String id = consoleService.readString("read.book.id");
 
             String firstName = consoleService.readString("read.author.firstname");
             String lastName = consoleService.readString("read.author.lastname");
@@ -112,7 +112,7 @@ public class BookShell {
     @ShellMethod(value = "Delete book", key = {"delete-book", "db"})
     public void deleteBook() {
         try {
-            long id = consoleService.readLong("read.book.id");
+            String id = consoleService.readString("read.book.id");
             bookService.delete(id);
         }
         catch (NoDataFoundException e) {
@@ -126,7 +126,7 @@ public class BookShell {
     @ShellMethod(value = "Find book by id", key = {"find-book-id", "fbi"})
     public void findBookById() {
         try {
-            long id = consoleService.readLong("read.book.id");
+            String id = consoleService.readString("read.book.id");
             Book book = bookService.findById(id);
             printBook(book);
         }

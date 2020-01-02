@@ -32,7 +32,7 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public Genre update(long id, String genreName) {
+    public Genre update(String id, String genreName) {
         //chek if exists
         if (!genreRepository.existsById(id)) {
             throw new NoDataFoundException();
@@ -48,7 +48,7 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(String id) {
         Optional<Genre> foundGenre = genreRepository.findById(id);
         if (!foundGenre.isPresent()) {
             throw new NoDataFoundException();
@@ -57,7 +57,7 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public Genre findById(long id){
+    public Genre findById(String id){
         Optional<Genre> foundGenre = genreRepository.findById(id);
         if (!foundGenre.isPresent()) {
             throw new NoDataFoundException();
