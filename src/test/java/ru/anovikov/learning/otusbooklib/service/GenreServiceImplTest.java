@@ -18,7 +18,8 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 class GenreServiceImplTest {
 
-    public static final String FIELD_ID = "";
+    private static final String FIELD_INS_ID = "123";
+    private static final String FIELD_UPD_ID = "456";
     public static final String FIELD_GENRENAME = "genre3";
 
     @InjectMocks
@@ -44,12 +45,12 @@ class GenreServiceImplTest {
 
     @Test
     void shouldCheckDuplicateUpdateGenre() {
-        Genre genre = new Genre(FIELD_GENRENAME);
+        Genre genre = new Genre(FIELD_INS_ID, FIELD_GENRENAME);
         when(genreRepository.findByGenreName(anyString())).thenReturn(Optional.of(genre));
         when(genreRepository.existsById(anyString())).thenReturn(true);
 
         assertThrows(DuplicateValueException.class, () -> {
-            genreService.update(FIELD_ID, FIELD_GENRENAME);
+            genreService.update(FIELD_UPD_ID, FIELD_GENRENAME);
         });
     }
 }

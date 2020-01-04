@@ -29,7 +29,8 @@ class BookServiceImplTest {
 
     public static final String FIELD_READ_TITLE = "read.book.title";
     public static final String FIELD_READ_ID = "read.book.id";
-    public static final String FIELD_BOOK_ID = "";
+    public static final String FIELD_BOOK_ID = "123";
+    public static final String FIELD_BOOK_DUP_ID = "456";
     public static final String FIELD_BOOK_TITLE = "testBookTitle";
 
     @InjectMocks
@@ -103,14 +104,14 @@ class BookServiceImplTest {
     void shouldCheckDuplicateUpdateBook() {
         Author author = new Author(FIELD_AUTHOR_ID, FIELD_AUTHOR_FIRSTNAME, FIELD_AUTHOR_LASTNAME);
         Genre genre = new Genre(FIELD_GENRE_ID, FIELD_GENRE_NAME);
-        Book book = new Book(author, genre, FIELD_BOOK_TITLE);
+        Book book = new Book(FIELD_BOOK_ID, author, genre, FIELD_BOOK_TITLE);
 
         when(bookRepository.findByAuthorAndGenreAndTitle(any(), any(), anyString())).thenReturn(Optional.of(book));
         when(bookRepository.existsById(anyString())).thenReturn(true);
         when(bookRepository.save(any())).thenReturn(book);
 
         assertThrows(DuplicateValueException.class, () -> {
-            bookService.update(FIELD_BOOK_ID, author, genre, FIELD_BOOK_TITLE);
+            bookService.update(FIELD_BOOK_DUP_ID, author, genre, FIELD_BOOK_TITLE);
         });
     }
 }
