@@ -1,6 +1,7 @@
 package ru.anovikov.learning.otusbooklib.domain;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "books")
@@ -8,11 +9,10 @@ public class Book {
 
     @Id
     private String id;
-
+    @DBRef
     private Author author;
-
+    @DBRef
     private Genre genre;
-
     private String title;
 
     public Book() {};
