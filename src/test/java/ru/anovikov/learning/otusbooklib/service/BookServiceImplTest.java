@@ -43,9 +43,6 @@ class BookServiceImplTest {
     GenreService genreService;
 
     @Mock
-    ConsoleService consoleService;
-
-    @Mock
     BookRepository bookRepository;
 
     @Before
@@ -60,8 +57,6 @@ class BookServiceImplTest {
 
         Genre genre = new Genre(FIELD_GENRE_ID, FIELD_GENRE_NAME);
         when(genreService.findByName(anyString())).thenReturn(genre);
-
-        when(consoleService.readString(FIELD_READ_TITLE)).thenReturn(FIELD_BOOK_TITLE);
 
         Book book = new Book(author, genre, FIELD_BOOK_TITLE);
 
@@ -78,8 +73,6 @@ class BookServiceImplTest {
 
         when(authorService.findByName(anyString(), anyString())).thenReturn(author);
         when(genreService.findByName(anyString())).thenReturn(genre);
-        when(consoleService.readString(FIELD_READ_ID)).thenReturn(FIELD_BOOK_ID);
-        when(consoleService.readString(FIELD_READ_TITLE)).thenReturn(FIELD_BOOK_TITLE);
         when(bookRepository.existsById(anyString())).thenReturn(true);
         when(bookRepository.save(any())).thenReturn(book);
 

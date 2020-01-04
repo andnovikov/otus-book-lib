@@ -7,7 +7,3 @@ spring:
       database: otusbook
       host: localhost
       port: 27017
-
-  shell:
-    interactive:
-      enabled: false

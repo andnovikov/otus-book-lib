@@ -12,12 +12,10 @@ import java.util.Optional;
 public class GenreServiceImpl implements GenreService {
 
     private GenreRepository genreRepository;
-    private ConsoleService consoleService;
 
     @Autowired
-    public GenreServiceImpl(GenreRepository genreRepository, ConsoleService consoleService) {
+    public GenreServiceImpl(GenreRepository genreRepository) {
         this.genreRepository = genreRepository;
-        this.consoleService = consoleService;
     }
 
     @Override

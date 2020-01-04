@@ -16,14 +16,12 @@ public class BookServiceImpl implements BookService{
     BookRepository bookRepository;
     AuthorService authorService;
     GenreService genreService;
-    ConsoleService consoleService;
 
     @Autowired
-    public BookServiceImpl (BookRepository bookRepository, AuthorService authorService, GenreService genreService, ConsoleService consoleService) {
+    public BookServiceImpl (BookRepository bookRepository, AuthorService authorService, GenreService genreService) {
         this.bookRepository = bookRepository;
         this.authorService = authorService;
         this.genreService = genreService;
-        this.consoleService = consoleService;
     }
 
     @Override
