@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.anovikov.learning.otusbooklib.domain.Author;
 import ru.anovikov.learning.otusbooklib.repository.AuthorRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -38,10 +39,26 @@ public class AuthorServiceImpl implements AuthorService {
         authorRepository.findById(id);
         // check for duplicate values
         Optional<Author> foundAuthor = authorRepository.findByFirstNameAndLastName(firstName, lastName);
-        if (foundAuthor.isPresent() && (foundAuthor.get().getId() != id)) {
+        if (foundAuthor.isPresent() && (!foundAuthor.get().getId().equalsIgnoreCase(id))) {
             throw new DuplicateValueException();
         }
         Author author = new Author(id, firstName, lastName);
+        author = authorRepository.save(author);
+        return author;
+    }
+
+    @Override
+    public Author update(Author author) {
+        //chek if exists
+        if (!authorRepository.existsById(author.getId())) {
+            throw new NoDataFoundException();
+        }
+        authorRepository.findById(author.getId());
+        // check for duplicate values
+        Optional<Author> foundAuthor = authorRepository.findByFirstNameAndLastName(author.getFirstName(), author.getLastName());
+        if (foundAuthor.isPresent() && (!foundAuthor.get().getId().equalsIgnoreCase(author.getId()))) {
+            throw new DuplicateValueException();
+        }
         author = authorRepository.save(author);
         return author;
     }
@@ -70,6 +87,11 @@ public class AuthorServiceImpl implements AuthorService {
             throw new NoDataFoundException();
         }
         return foundAuthor.get();
-    };
+    }
+
+    @Override
+    public List<Author> getAll() {
+        return authorRepository.findAll();
+    }
 
 }

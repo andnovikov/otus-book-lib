@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Authors</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css" th:href="@{/css/style.css}">
+</head>
+<body>
+<div><a href="#" th:href="@{/}">Назад</a></div>
+<h1>Авторы</h1>
+<table align="centre" width="40%">
+    <tr>
+        <th>Идентификатор</th>
+        <th>Имя автора</th>
+        <th>Фамилия автора</th>
+        <th>Редактировать</th>
+    </tr>
+    <tr th:each="author : ${authors}">
+        <td th:text="${author.id}">100500</td>
+        <td th:text="${author.firstName}">Лев</td>
+        <td th:text="${author.lastName}">Толстой</td>
+        <td>
+            <a href="#" th:text="${author.id}" th:href="@{/author/{id}(id=${author.id})}">Редактировать</a>
+        </td>
+        <td>
+            <form th:action="@{/author/delete/{id}(id=${author.id})}" th:object="${author}" method="post">
+                <button type="submit" onClick="return confirm('Вы уверены, что хотите удалить?')">Удалить автора</button>
+            </form>
+        </td>
+    </tr>
+</table>
+
+<div>
+    <form action="#" th:action="@{/author}" method="post">
+        <h2>Новый автор</h2>
+        <div class="row">
+            <label for="firstName-input">Имя:</label>
+            <input id="firstName-input" th:name="firstName" type="text"/>
+        </div>
+        <div class="row">
+            <label for="lastName-input">Фамилия:</label>
+            <input id="lastName-input" th:name="lastName" type="text"/>
+        </div>
+        <div class="row">
+            <button type="submit">Добавить</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

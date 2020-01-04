@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.anovikov.learning.otusbooklib.repository.GenreRepository;
 import ru.anovikov.learning.otusbooklib.domain.Genre;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -39,10 +40,25 @@ public class GenreServiceImpl implements GenreService {
         }
         // check for duplicate values
         Optional<Genre> foundGenre = genreRepository.findByGenreName(genreName);
-        if (foundGenre.isPresent() && (foundGenre.get().getId() != id)) {
+        if (foundGenre.isPresent() && (!foundGenre.get().getId().equalsIgnoreCase(id) )) {
             throw new DuplicateValueException();
         }
         Genre genre = new Genre(id, genreName);
+        genre = genreRepository.save(genre);
+        return genre;
+    }
+
+    @Override
+    public Genre update(Genre genre) {
+        //chek if exists
+        if (!genreRepository.existsById(genre.getId())) {
+            throw new NoDataFoundException();
+        }
+        // check for duplicate values
+        Optional<Genre> foundGenre = genreRepository.findByGenreName(genre.getGenreName());
+        if (foundGenre.isPresent() && (!foundGenre.get().getId().equalsIgnoreCase(genre.getId()))) {
+            throw new DuplicateValueException();
+        }
         genre = genreRepository.save(genre);
         return genre;
     }
@@ -74,4 +90,8 @@ public class GenreServiceImpl implements GenreService {
         return foundGenre.get();
     }
 
+    @Override
+    public List<Genre> getAll() {
+        return genreRepository.findAll();
+    }
 }

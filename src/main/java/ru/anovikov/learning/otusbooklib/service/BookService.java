@@ -4,10 +4,14 @@ import ru.anovikov.learning.otusbooklib.domain.Author;
 import ru.anovikov.learning.otusbooklib.domain.Book;
 import ru.anovikov.learning.otusbooklib.domain.Genre;
 
+import java.util.List;
+
 public interface BookService {
     Book insert(Author author, Genre genre, String title);
 
     Book update(String id, Author author, Genre genre, String title);
+
+    Book update(Book book);
 
     void delete(String id);
 
@@ -15,4 +19,5 @@ public interface BookService {
 
     Book findByTitle(String title);
 
+    List<Book> getAll();
 }
