@@ -18,7 +18,8 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 class AuthorServiceImplTest {
 
-    private static final String FIELD_INS_ID = "";
+    private static final String FIELD_INS_ID = "123";
+    private static final String FIELD_UPD_ID = "456";
     private static final String FIELD_INS_FIRSTNAME = "firstname";
     private static final String FIELD_INS_LASTNAME = "lastname";
 
@@ -45,12 +46,12 @@ class AuthorServiceImplTest {
 
     @Test
     void shouldCheckDuplicateUpdateAuthor() {
-        Author author = new Author(FIELD_INS_FIRSTNAME, FIELD_INS_LASTNAME);
+        Author author = new Author(FIELD_INS_ID, FIELD_INS_FIRSTNAME, FIELD_INS_LASTNAME);
         when(authorRepository.findByFirstNameAndLastName(anyString(), anyString())).thenReturn(Optional.of(author));
         when(authorRepository.existsById(anyString())).thenReturn(true);
 
         assertThrows(DuplicateValueException.class, () -> {
-            authorService.update(FIELD_INS_ID, FIELD_INS_FIRSTNAME, FIELD_INS_LASTNAME);
+            authorService.update(FIELD_UPD_ID, FIELD_INS_FIRSTNAME, FIELD_INS_LASTNAME);
         });
     }
 }

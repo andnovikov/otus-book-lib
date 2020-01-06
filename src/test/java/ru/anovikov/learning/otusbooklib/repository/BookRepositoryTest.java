@@ -43,7 +43,7 @@ public class BookRepositoryTest {
         book = bookRepository.save(new Book(author, genre, FIELD_INS_TITLE));
     }
 
-    @org.testng.annotations.Test
+    @Test
     public void shouldSaveAndLoadCorrectBook() {
         assertThat(book.getTitle()).isEqualTo(FIELD_INS_TITLE);
     }

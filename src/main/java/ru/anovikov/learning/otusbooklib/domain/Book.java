@@ -1,20 +1,18 @@
 package ru.anovikov.learning.otusbooklib.domain;
 
-import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Data
 @Document(collection = "books")
 public class Book {
 
     @Id
     private String id;
-
+    @DBRef
     private Author author;
-
+    @DBRef
     private Genre genre;
-
     private String title;
 
     public Book() {};
@@ -32,8 +30,35 @@ public class Book {
         this.author = author;
     }
 
-    @Override
-    public String toString() {
-        return id + " " + author.getFirstName() + " " + author.getLastName() + " " + genre.getGenreName() + " " + title;
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
+
+    public Genre getGenre() {
+        return genre;
+    }
+
+    public void setGenre(Genre genre) {
+        this.genre = genre;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

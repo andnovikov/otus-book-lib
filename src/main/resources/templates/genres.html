@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Genres</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css" th:href="@{/css/style.css}">
+</head>
+<body>
+<div><a href="#" th:href="@{/}">Назад</a></div>
+<h2>Жанры</h2>
+<table align="centre" width="40%">
+    <tr>
+        <th>Идентификатор</th>
+        <th>Наименование</th>
+        <th>Редактировать</th>
+    </tr>
+    <tr th:each="genre : ${genres}">
+        <td th:text="${genre.id}">100500</td>
+        <td th:text="${genre.genreName}">Роман</td>
+        <td>
+            <a href="#" th:text="${genre.id}" th:href="@{/genre/{id}(id=${genre.id})}">Редактировать</a>
+        </td>
+        <td>
+            <form th:action="@{/genre/delete/{id}(id=${genre.id})}" th:object="${genre}" method="post">
+                <button type="submit" onClick="return confirm('Вы уверены, что хотите удалить?')">Удалить жанр</button>
+            </form>
+        </td>
+    </tr>
+</table>
+<div>
+    <form action="#" th:action="@{/genre}" method="post">
+        <h2>Новый жанр</h2>
+        <div class="row">
+            <label for="genre-name-input">Наименование:</label>
+            <input id="genre-name-input" th:name="genreName" type="text"/>
+        </div>
+        <div class="row">
+            <button type="submit">Добавить</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

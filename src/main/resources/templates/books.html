@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Book</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css" th:href="@{/css/style.css}">
+</head>
+<body>
+<div><a href="#" th:href="@{/}">Назад</a></div>
+<h2>Книги</h2>
+<table align="centre" width="40%">
+    <tr>
+        <th>Идентификатор</th>
+        <th>Жанр</th>
+        <th>Автор</th>
+        <th>Наименование</th>
+        <th>Редактировать</th>
+    </tr>
+    <tr th:each="book : ${books}">
+        <td th:text="${book.id}">100500</td>
+        <td th:text="${book.genre.genreName}">Роман</td>
+        <td th:text="${book.author.firstName} + ' ' + ${book.author.lastName}">Лев Толстой</td>
+        <td th:text="${book.title}">Война и мир</td>
+        <td>
+            <a href="#" th:text="${book.id}" th:href="@{/book/{id}(id=${book.id})}">Редактировать</a>
+        </td>
+        <td>
+            <form th:action="@{/book/delete/{id}(id=${book.id})}" th:object="${book}" method="post">
+                <button type="submit" onClick="return confirm('Вы уверены, что хотите удалить?')">Удалить книгу</button>
+            </form>
+        </td>
+    </tr>
+</table>
+<div>
+    <form action="#" th:action="@{/book}" th:object="${book}" method="post">
+        <h2>Новая книга</h2>
+        <div class="row">
+            <label for="genre-input">Жанр: </label>
+            <select id="genre-input" th:field="*{genre}">
+                <option th:each="genre : ${genres}"
+                        th:value="${{genre.id}}"
+                        th:text="${genre.genreName}">Тестовый жанр</option>
+            </select>
+        </div>
+        <div class="row">
+            <label for="author-input">Автор: </label>
+            <select id="author-input" th:field="*{author}">
+                <option th:each="author : ${authors}"
+                        th:value="${{author.id}}"
+                        th:text="${author.firstName} + ' ' + ${author.lastName}">Тестовый жанр</option>
+            </select>
+        </div>
+        <div class="row">
+            <label for="book-title-input">Наименование:</label>
+            <input id="book-title-input" th:name="title" type="text"/>
+        </div>
+        <div class="row">
+            <button type="submit">Добавить</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

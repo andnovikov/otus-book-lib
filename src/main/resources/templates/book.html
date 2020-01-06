@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Book</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css" th:href="@{/css/style.css}">
+</head>
+<body>
+<div><a href="#" th:href="@{/books}">Назад</a></div>
+<form action="#" th:action="@{/book/{id}(id=${book.id})}" th:object="${book}" method="post">
+    <h2>Книга</h2>
+    <div class="row">
+        <label for="id-input">ID:</label>
+        <input id="id-input" type="text" readonly="readonly" th:field="*{id}" value="1"/>
+    </div>
+    <div class="row">
+        <label for="genre-input">Жанр: </label>
+        <select id="genre-input" th:field="*{genre}">
+            <option th:each="genre : ${genres}"
+                    th:value="${{genre.id}}"
+                    th:text="${genre.genreName}">Тестовый жанр</option>
+        </select>
+    </div>
+    <div class="row">
+        <label for="author-input">Автор: </label>
+        <select id="author-input" th:field="*{author}">
+            <option th:each="author : ${authors}"
+                    th:value="${{author.id}}"
+                    th:text="${author.firstName} + ' ' + ${author.lastName}">Тестовый жанр</option>
+        </select>
+    </div>
+    <div class="row">
+        <label for="book-title-input">Наименование:</label>
+        <input id="book-title-input" th:field="*{title}" type="text"/>
+    </div>
+    <div class="row">
+        <button type="submit">Отправить</button>
+    </div>
+</form>
+</body>
+</html>

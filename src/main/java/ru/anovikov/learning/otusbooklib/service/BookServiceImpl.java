@@ -7,6 +7,7 @@ import ru.anovikov.learning.otusbooklib.domain.Book;
 import ru.anovikov.learning.otusbooklib.domain.Genre;
 import ru.anovikov.learning.otusbooklib.repository.BookRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -15,14 +16,12 @@ public class BookServiceImpl implements BookService{
     BookRepository bookRepository;
     AuthorService authorService;
     GenreService genreService;
-    ConsoleService consoleService;
 
     @Autowired
-    public BookServiceImpl (BookRepository bookRepository, AuthorService authorService, GenreService genreService, ConsoleService consoleService) {
+    public BookServiceImpl (BookRepository bookRepository, AuthorService authorService, GenreService genreService) {
         this.bookRepository = bookRepository;
         this.authorService = authorService;
         this.genreService = genreService;
-        this.consoleService = consoleService;
     }
 
     @Override
@@ -45,11 +44,26 @@ public class BookServiceImpl implements BookService{
         }
         // check for duplicate values
         Optional<Book> foundBook = bookRepository.findByAuthorAndGenreAndTitle(author, genre, title);
-        if (foundBook.isPresent() && (foundBook.get().getId() != id)) {
+        if (foundBook.isPresent() && (!foundBook.get().getId().equalsIgnoreCase(id))) {
             throw new DuplicateValueException();
         }
 
         Book book = new Book(id, author, genre, title);
+        book = bookRepository.save(book);
+        return book;
+    }
+
+    @Override
+    public Book update(Book book) {
+        //chek if exists
+        if (!bookRepository.existsById(book.getId())) {
+            throw new NoDataFoundException();
+        }
+        // check for duplicate values
+        Optional<Book> foundBook = bookRepository.findByAuthorAndGenreAndTitle(book.getAuthor(), book.getGenre(), book.getTitle());
+        if (foundBook.isPresent() && (!foundBook.get().getId().equalsIgnoreCase(book.getId()))) {
+            throw new DuplicateValueException();
+        }
         book = bookRepository.save(book);
         return book;
     }
@@ -79,5 +93,12 @@ public class BookServiceImpl implements BookService{
             throw new NoDataFoundException();
         }
         return foundBook.get();
-    };
+    }
+
+    @Override
+    public List<Book> getAll() {
+        return bookRepository.findAll();
+    }
+
+    ;
 }
