@@ -1,6 +1,8 @@
 package ru.anovikov.learning.otusbooklib.service;
 
-public class DataInputException extends RuntimeException {
+import ru.anovikov.learning.otusbooklib.config.OtusBookLibException;
+
+public class DataInputException extends OtusBookLibException {
 
     public DataInputException() {}
 
