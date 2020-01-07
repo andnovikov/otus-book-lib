@@ -8,6 +8,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.anovikov.learning.otusbooklib.domain.Genre;
+import ru.anovikov.learning.otusbooklib.rest.GenreController;
 import ru.anovikov.learning.otusbooklib.service.GenreService;
 
 import static org.mockito.Mockito.verify;
