@@ -1,13 +1,17 @@
 package ru.anovikov.learning.otusbooklib.rest;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.anovikov.learning.otusbooklib.domain.Author;
 import ru.anovikov.learning.otusbooklib.service.AuthorService;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 public class AuthorController {
 
@@ -19,28 +23,34 @@ public class AuthorController {
     }
 
     @GetMapping(value = "/api/author")
-    public List<Author> getAuthors() {
-        return authorService.getAll();
+    public ResponseEntity<List<Author>> getAuthors() {
+        log.debug("REST request to get all authors");
+        return new ResponseEntity<>(authorService.getAll(), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/api/author/{authorId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Author getAuthor(@PathVariable String authorId) {
-        return authorService.findById(authorId);
+    @GetMapping(value = "/api/author/{authorId}")
+    public ResponseEntity<Author> getAuthor(@PathVariable String authorId) {
+        log.debug("REST request to get author: " + authorId);
+        return new ResponseEntity<>(authorService.findById(authorId), HttpStatus.OK);
     }
 
     @PostMapping(value = "/api/author", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void addAuthor(@RequestBody Author author) {
-        authorService.insert(author.getFirstName(), author.getLastName());
+    public ResponseEntity<Author> addAuthor(@RequestBody Author author) {
+        log.debug("REST request to insert author: ", author);
+        return new ResponseEntity<>(authorService.insert(author.getFirstName(), author.getLastName()), HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/api/author/{authorId}")
-    public void updateAuthor(@PathVariable String authorId, @ModelAttribute Author author) {
-        authorService.update(author);
+    public ResponseEntity<Author> updateAuthor(@PathVariable String authorId, @RequestBody Author author) {
+        log.debug("REST request to update author: ", authorId);
+        return new ResponseEntity<>(authorService.update(author), HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping(value = "/api/author/{authorId}")
-    public void deleteAuthor(@PathVariable String authorId, @ModelAttribute Author author) {
+    public ResponseEntity<Author> deleteAuthor(@PathVariable String authorId) {
+        log.debug("REST request to delete author: ", authorId);
         authorService.delete(authorId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

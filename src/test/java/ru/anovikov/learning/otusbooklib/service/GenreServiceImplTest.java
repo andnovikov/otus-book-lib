@@ -37,9 +37,8 @@ class GenreServiceImplTest {
     void shouldCheckDuplicateInsertGenre() {
         Genre genre = new Genre(FIELD_GENRENAME);
         when(genreRepository.findByGenreName(anyString())).thenReturn(Optional.of(genre));
-
         assertThrows(DuplicateValueException.class, () -> {
-            genreService.insert(FIELD_GENRENAME);
+            genreService.insert(new Genre(FIELD_GENRENAME));
         });
     }
 
