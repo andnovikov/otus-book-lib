@@ -44,7 +44,7 @@ public class BookController {
 
     @PostMapping(value = "/api/book", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Book> addBook(@RequestBody Book book) {
-        log.debug("REST request to add genre: " + book.getId());
+        log.debug("REST request to add genre: ", book);
         return new ResponseEntity<>(bookService.insert(book.getAuthor(), book.getGenre(), book.getTitle()), HttpStatus.CREATED);
     }
 
