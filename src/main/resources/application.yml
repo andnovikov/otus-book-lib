@@ -4,12 +4,8 @@ spring:
 
   data:
     mongodb:
-      database: otusbook
-      host: localhost
-      port: 27017
-      
       host: ds361488.mlab.com
       database: heroku_tjwv260g
       username: user
-      password: sportnow256
+      password: Aa123456
       uri: mongodb://user:Aa123456@ds361488.mlab.com:61488/heroku_tjwv260g?retryWrites=false
