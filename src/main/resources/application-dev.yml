@@ -1,0 +1,9 @@
+spring:
+  messages:
+    basename: i18n.messages
+
+  data:
+    mongodb:
+      database: otusbook
+      host: localhost
+      port: 27017
