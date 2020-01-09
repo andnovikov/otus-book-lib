@@ -1,5 +1,7 @@
 package ru.anovikov.learning.otusbooklib.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -8,11 +10,19 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Book {
 
     @Id
+    @JsonProperty("id")
+    @ApiModelProperty(notes = "Book id, generated value", position = 0)
     private String id;
     @DBRef
+    @JsonProperty("author")
+    @ApiModelProperty(notes = "Book author", position = 1)
     private Author author;
     @DBRef
+    @JsonProperty("genre")
+    @ApiModelProperty(notes = "Book genre", position  = 2)
     private Genre genre;
+    @JsonProperty("title")
+    @ApiModelProperty(notes = "Book title", position = 3)
     private String title;
 
     public Book() {};

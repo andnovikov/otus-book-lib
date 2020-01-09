@@ -1,5 +1,7 @@
 package ru.anovikov.learning.otusbooklib.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -7,10 +9,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Author {
 
     @Id
+    @JsonProperty(value = "id")
+    @ApiModelProperty(notes = "Author id, generated value", position = 0)
     private String id;
-
+    @JsonProperty(value = "first_name")
+    @ApiModelProperty(notes = "Author name", position = 1)
     private String firstName;
-
+    @JsonProperty(value = "last_name")
+    @ApiModelProperty(notes = "Author surname", position = 2)
     private String lastName;
 
     public Author() {};

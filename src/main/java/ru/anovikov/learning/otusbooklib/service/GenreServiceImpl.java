@@ -19,13 +19,12 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public Genre insert(String genreName) {
+    public Genre insert(Genre genre) {
         // check for duplicate values
-        Optional<Genre> foundGenre = genreRepository.findByGenreName(genreName);
+        Optional<Genre> foundGenre = genreRepository.findByGenreName(genre.getGenreName());
         if (foundGenre.isPresent()) {
             throw new DuplicateValueException();
         }
-        Genre genre = new Genre(genreName);
         genre = genreRepository.save(genre);
         return genre;
     }

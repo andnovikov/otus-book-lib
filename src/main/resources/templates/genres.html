@@ -4,40 +4,54 @@
     <meta charset="UTF-8">
     <title>Genres</title>
     <link rel="stylesheet" type="text/css" href="../static/css/style.css" th:href="@{/css/style.css}">
+
+    <script src="webjars/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="webjars/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 <body>
 <div><a href="#" th:href="@{/}">Назад</a></div>
 <h2>Жанры</h2>
-<table align="centre" width="40%">
-    <tr>
-        <th>Идентификатор</th>
-        <th>Наименование</th>
-        <th>Редактировать</th>
-    </tr>
-    <tr th:each="genre : ${genres}">
-        <td th:text="${genre.id}">100500</td>
-        <td th:text="${genre.genreName}">Роман</td>
-        <td>
-            <a href="#" th:text="${genre.id}" th:href="@{/genre/{id}(id=${genre.id})}">Редактировать</a>
-        </td>
-        <td>
-            <form th:action="@{/genre/delete/{id}(id=${genre.id})}" th:object="${genre}" method="post">
-                <button type="submit" onClick="return confirm('Вы уверены, что хотите удалить?')">Удалить жанр</button>
-            </form>
-        </td>
-    </tr>
-</table>
-<div>
-    <form action="#" th:action="@{/genre}" method="post">
-        <h2>Новый жанр</h2>
-        <div class="row">
-            <label for="genre-name-input">Наименование:</label>
-            <input id="genre-name-input" th:name="genreName" type="text"/>
-        </div>
-        <div class="row">
-            <button type="submit">Добавить</button>
-        </div>
-    </form>
+<div class="btn-group">
+    <button type="button" class="btn btn-primary" onclick="newGenre()">Новый жанр</button>
 </div>
+<table align="centre" width="40%">
+    <thead>
+        <tr>
+            <th>Идентификатор</th>
+            <th>Наименование</th>
+            <th>Редактировать</th>
+        </tr>
+    </thead>
+    <tbody id="container"></tbody>
+</table>
+
+<!-- Modal -->
+<div id="myModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="form">
+                    <input type="hidden" class="form-control" id="inputId">
+                    <div class="form-label-group">
+                        <label for="inputGenrename">Имя</label>
+                        <input type="genrename" class="form-control" id="inputGenrename">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="saveGenre()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{/js/genre.js}"></script>
 </body>
 </html>
